@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_address_addresses",
+  "info": {
+    "displayName": "Address"
+  },
+  "options": {},
+  "attributes": {
+    "address1": {
+      "type": "string"
+    },
+    "address2": {
+      "type": "string"
+    },
+    "address3": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "pin": {
+      "type": "integer",
+      "max": 999999,
+      "min": 100000,
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "integer",
+      "required": true,
+      "min": 1000000000,
+      "max": 9999999999
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_image_images",
+  "info": {
+    "displayName": "Image"
+  },
+  "options": {},
+  "attributes": {
+    "link": {
+      "type": "string",
+      "required": true
+    },
+    "altText": {
+      "type": "string"
+    }
+  }
+}
