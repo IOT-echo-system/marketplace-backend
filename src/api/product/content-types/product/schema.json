@@ -72,6 +72,12 @@
         "preset": "standard"
       },
       "customField": "plugin::ckeditor.CKEditor"
+    },
+    "shortDescription": {
+      "type": "text"
+    },
+    "mrp": {
+      "type": "decimal"
     }
   }
 }

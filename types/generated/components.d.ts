@@ -33,6 +33,32 @@ export interface AddressAddress extends Schema.Component {
   };
 }
 
+export interface CtaCta extends Schema.Component {
+  collectionName: 'components_cta_ctas';
+  info: {
+    displayName: 'CTA';
+  };
+  attributes: {
+    label: Attribute.String & Attribute.Required;
+    link: Attribute.String & Attribute.Required;
+  };
+}
+
+export interface HeroBannerHeroBanner extends Schema.Component {
+  collectionName: 'components_hero_banner_hero_banners';
+  info: {
+    displayName: 'Hero Banner';
+    description: '';
+  };
+  attributes: {
+    title: Attribute.String;
+    subtitle: Attribute.String;
+    cta: Attribute.Component<'cta.cta'>;
+    image: Attribute.Component<'image.image'>;
+    darkText: Attribute.Boolean & Attribute.DefaultTo<false>;
+  };
+}
+
 export interface ImageImage extends Schema.Component {
   collectionName: 'components_image_images';
   info: {
@@ -59,6 +85,8 @@ declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'address.address': AddressAddress;
+      'cta.cta': CtaCta;
+      'hero-banner.hero-banner': HeroBannerHeroBanner;
       'image.image': ImageImage;
       'nav-link.nav-link': NavLinkNavLink;
     }

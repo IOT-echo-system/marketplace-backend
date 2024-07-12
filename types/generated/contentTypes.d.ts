@@ -831,12 +831,17 @@ export interface ApiMainMenuMainMenu extends Schema.SingleType {
     singularName: 'main-menu';
     pluralName: 'main-menus';
     displayName: 'Main menu';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    menuItems: Attribute.Component<'nav-link.nav-link', true>;
+    categories: Attribute.Relation<
+      'api::main-menu.main-menu',
+      'oneToMany',
+      'api::category.category'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -895,6 +900,31 @@ export interface ApiOrderOrder extends Schema.CollectionType {
   };
 }
 
+export interface ApiPagePage extends Schema.CollectionType {
+  collectionName: 'pages';
+  info: {
+    singularName: 'page';
+    pluralName: 'pages';
+    displayName: 'Page';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    header: Attribute.DynamicZone<['hero-banner.hero-banner']>;
+    name: Attribute.String;
+    slug: Attribute.UID<'api::page.page', 'name'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Schema.CollectionType {
   collectionName: 'products';
   info: {
@@ -943,6 +973,8 @@ export interface ApiProductProduct extends Schema.CollectionType {
           preset: 'standard';
         }
       >;
+    shortDescription: Attribute.Text;
+    mrp: Attribute.Decimal;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1036,6 +1068,7 @@ declare module '@strapi/types' {
       'api::category.category': ApiCategoryCategory;
       'api::main-menu.main-menu': ApiMainMenuMainMenu;
       'api::order.order': ApiOrderOrder;
+      'api::page.page': ApiPagePage;
       'api::product.product': ApiProductProduct;
       'api::site-info.site-info': ApiSiteInfoSiteInfo;
       'api::tag.tag': ApiTagTag;

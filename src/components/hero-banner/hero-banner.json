@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_hero_banner_hero_banners",
+  "info": {
+    "displayName": "Hero Banner",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "cta": {
+      "displayName": "CTA",
+      "type": "component",
+      "repeatable": false,
+      "component": "cta.cta"
+    },
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "image.image"
+    },
+    "darkText": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
