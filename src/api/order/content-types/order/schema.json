@@ -12,26 +12,8 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "orderId": {
-      "type": "string",
-      "unique": true,
-      "required": true
-    },
-    "email": {
-      "type": "email",
-      "required": true
-    },
     "paymentInfo": {
       "type": "json"
-    },
-    "products": {
-      "type": "json"
-    },
-    "address": {
-      "displayName": "Address",
-      "type": "component",
-      "repeatable": false,
-      "component": "address.address"
     },
     "txnId": {
       "type": "string"
@@ -47,7 +29,31 @@
         "PLACED",
         "DELIVERED",
         "CANCELLED"
-      ]
+      ],
+      "default": "CREATED",
+      "required": true
+    },
+    "shippingAddress": {
+      "type": "json",
+      "required": true
+    },
+    "billingAddress": {
+      "type": "json",
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "private": true,
+      "inversedBy": "orders"
+    },
+    "products": {
+      "displayName": "Product",
+      "type": "component",
+      "repeatable": true,
+      "component": "product.product",
+      "required": true
     }
   }
 }

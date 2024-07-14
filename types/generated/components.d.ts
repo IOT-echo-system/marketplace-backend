@@ -1,38 +1,5 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
-export interface AddressAddress extends Schema.Component {
-  collectionName: 'components_address_addresses';
-  info: {
-    displayName: 'Address';
-  };
-  attributes: {
-    address1: Attribute.String;
-    address2: Attribute.String;
-    address3: Attribute.String;
-    city: Attribute.String;
-    state: Attribute.String;
-    pin: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetMinMax<
-        {
-          min: 100000;
-          max: 999999;
-        },
-        number
-      >;
-    name: Attribute.String & Attribute.Required;
-    phone: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetMinMax<
-        {
-          min: 1000000000;
-          max: 9999999999;
-        },
-        number
-      >;
-  };
-}
-
 export interface CtaCta extends Schema.Component {
   collectionName: 'components_cta_ctas';
   info: {
@@ -81,14 +48,45 @@ export interface NavLinkNavLink extends Schema.Component {
   };
 }
 
+export interface ProductProduct extends Schema.Component {
+  collectionName: 'components_product_products';
+  info: {
+    displayName: 'OrderProduct';
+    description: '';
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    price: Attribute.Decimal &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    qty: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    shortDescription: Attribute.Text;
+    featuredImage: Attribute.Component<'image.image'>;
+    slug: Attribute.String & Attribute.Required;
+    productId: Attribute.String & Attribute.Required;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
-      'address.address': AddressAddress;
       'cta.cta': CtaCta;
       'hero-banner.hero-banner': HeroBannerHeroBanner;
       'image.image': ImageImage;
       'nav-link.nav-link': NavLinkNavLink;
+      'product.product': ProductProduct;
     }
   }
 }

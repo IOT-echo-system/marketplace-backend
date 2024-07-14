@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_product_products",
+  "info": {
+    "displayName": "OrderProduct",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true,
+      "min": 1
+    },
+    "qty": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "shortDescription": {
+      "type": "text"
+    },
+    "featuredImage": {
+      "type": "component",
+      "repeatable": false,
+      "component": "image.image"
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "productId": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
