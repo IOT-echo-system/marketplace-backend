@@ -12,33 +12,8 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "paymentInfo": {
-      "type": "json"
-    },
-    "txnId": {
-      "type": "string"
-    },
     "amount": {
       "type": "integer",
-      "required": true
-    },
-    "status": {
-      "type": "enumeration",
-      "enum": [
-        "CREATED",
-        "PLACED",
-        "DELIVERED",
-        "CANCELLED"
-      ],
-      "default": "CREATED",
-      "required": true
-    },
-    "shippingAddress": {
-      "type": "json",
-      "required": true
-    },
-    "billingAddress": {
-      "type": "json",
       "required": true
     },
     "user": {
@@ -54,6 +29,33 @@
       "repeatable": true,
       "component": "product.product",
       "required": true
+    },
+    "billingAddress": {
+      "type": "component",
+      "repeatable": false,
+      "component": "address.address",
+      "required": true
+    },
+    "shippingAddress": {
+      "type": "component",
+      "repeatable": false,
+      "component": "address.address"
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "CREATED",
+        "PLACED",
+        "DELIVERED",
+        "CANCELLED"
+      ],
+      "required": true,
+      "default": "CREATED"
+    },
+    "payment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::payment.payment"
     }
   }
 }

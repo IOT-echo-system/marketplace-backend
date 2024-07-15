@@ -847,6 +847,7 @@ export interface ApiAddressAddress extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+    district: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -949,16 +950,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    paymentInfo: Attribute.JSON;
-    txnId: Attribute.String;
     amount: Attribute.Integer & Attribute.Required;
-    status: Attribute.Enumeration<
-      ['CREATED', 'PLACED', 'DELIVERED', 'CANCELLED']
-    > &
-      Attribute.Required &
-      Attribute.DefaultTo<'CREATED'>;
-    shippingAddress: Attribute.JSON & Attribute.Required;
-    billingAddress: Attribute.JSON & Attribute.Required;
     user: Attribute.Relation<
       'api::order.order',
       'manyToOne',
@@ -966,6 +958,18 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     > &
       Attribute.Private;
     products: Attribute.Component<'product.product', true> & Attribute.Required;
+    billingAddress: Attribute.Component<'address.address'> & Attribute.Required;
+    shippingAddress: Attribute.Component<'address.address'>;
+    state: Attribute.Enumeration<
+      ['CREATED', 'PLACED', 'DELIVERED', 'CANCELLED']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'CREATED'>;
+    payment: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'api::payment.payment'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1005,6 +1009,50 @@ export interface ApiPagePage extends Schema.CollectionType {
     createdBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPaymentPayment extends Schema.CollectionType {
+  collectionName: 'payments';
+  info: {
+    singularName: 'payment';
+    pluralName: 'payments';
+    displayName: 'Payment';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    order: Attribute.Relation<
+      'api::payment.payment',
+      'oneToOne',
+      'api::order.order'
+    >;
+    verify: Attribute.JSON;
+    finalState: Attribute.JSON;
+    paymentOrder: Attribute.JSON & Attribute.Required;
+    paymentId: Attribute.String;
+    status: Attribute.Enumeration<
+      ['CREATED', 'ATTEMPT', 'FAILURE', 'SUCCESS']
+    > &
+      Attribute.Required;
+    orderId: Attribute.String & Attribute.Required & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::payment.payment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::payment.payment',
+      'oneToOne',
+      'admin::user'
+    > &
       Attribute.Private;
   };
 }
@@ -1154,6 +1202,7 @@ declare module '@strapi/types' {
       'api::main-menu.main-menu': ApiMainMenuMainMenu;
       'api::order.order': ApiOrderOrder;
       'api::page.page': ApiPagePage;
+      'api::payment.payment': ApiPaymentPayment;
       'api::product.product': ApiProductProduct;
       'api::site-info.site-info': ApiSiteInfoSiteInfo;
       'api::tag.tag': ApiTagTag;

@@ -1,5 +1,39 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
+export interface AddressAddress extends Schema.Component {
+  collectionName: 'components_address_addresses';
+  info: {
+    displayName: 'Address';
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    address1: Attribute.String & Attribute.Required;
+    address2: Attribute.String;
+    address3: Attribute.String;
+    city: Attribute.String & Attribute.Required;
+    district: Attribute.String & Attribute.Required;
+    state: Attribute.String & Attribute.Required;
+    pinCode: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 100000;
+          max: 999999;
+        },
+        number
+      >;
+    mobileNo: Attribute.BigInteger &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: '1000000000';
+          max: '9999999999';
+        },
+        string
+      >;
+  };
+}
+
 export interface CtaCta extends Schema.Component {
   collectionName: 'components_cta_ctas';
   info: {
@@ -82,6 +116,7 @@ export interface ProductProduct extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'address.address': AddressAddress;
       'cta.cta': CtaCta;
       'hero-banner.hero-banner': HeroBannerHeroBanner;
       'image.image': ImageImage;

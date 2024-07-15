@@ -1,0 +1,51 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payments",
+  "info": {
+    "singularName": "payment",
+    "pluralName": "payments",
+    "displayName": "Payment",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order"
+    },
+    "verify": {
+      "type": "json"
+    },
+    "finalState": {
+      "type": "json"
+    },
+    "paymentOrder": {
+      "type": "json",
+      "required": true
+    },
+    "paymentId": {
+      "type": "string",
+      "required": false,
+      "unique": false
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "CREATED",
+        "ATTEMPT",
+        "FAILURE",
+        "SUCCESS"
+      ],
+      "required": true
+    },
+    "orderId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    }
+  }
+}

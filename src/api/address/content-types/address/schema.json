@@ -51,6 +51,10 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "addresses"
+    },
+    "district": {
+      "type": "string",
+      "required": true
     }
   }
 }
