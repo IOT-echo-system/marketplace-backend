@@ -16,7 +16,7 @@ export default factories.createCoreController('api::payment.payment', ({strapi})
 
     try {
       const paymentOrder = await razorpay.orders.create(options);
-      await paymentService.createPayment(paymentOrder, orderId)
+      await paymentService.createPayment(paymentOrder, orderId, ctx)
       ctx.send(paymentOrder);
     } catch (error) {
       ctx.throw(500, error);
@@ -32,10 +32,10 @@ export default factories.createCoreController('api::payment.payment', ({strapi})
       .update(razorpay_order_id + "|" + razorpay_payment_id)
       .digest('hex');
 
-      const payment = await razorpay.payments.fetch(razorpay_payment_id)
+    const payment = await razorpay.payments.fetch(razorpay_payment_id)
     if (generated_signature === razorpay_signature) {
-      await paymentService.updatePaymentSuccess(payment)
-      ctx.send({status: 'success', message: 'Payment verified successfully'});
+      const order = await paymentService.updatePaymentSuccess(payment)
+      ctx.send({status: 'success', order});
     } else {
       await paymentService.updatePaymentFailed(payment)
       ctx.send({status: 'failure', message: 'Payment verification failed'});

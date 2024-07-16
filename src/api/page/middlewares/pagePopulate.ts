@@ -26,6 +26,6 @@ export default (config, {strapi}: { strapi: Strapi }) => {
       populate,
       ...ctx.query
     }
-    await next();
+     await next();
   };
 };

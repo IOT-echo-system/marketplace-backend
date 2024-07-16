@@ -32,10 +32,17 @@ export default factories.createCoreController('api::order.order', ({strapi}) => 
       ctx.throw(error)
     }
   },
-  async find(ctx) {
-    return strapi.entityService.findMany('api::order.order', {
+  async find(ctx, next) {
+    ctx.query = {
+      ...ctx.query,
       filters: {user: ctx.state.user.id},
-      populate: ['billingAddress', 'shippingAddress']
-    });
+      sort: ['createdAt:desc'],
+      populate: {
+        shippingAddress: '*',
+        billingAddress: '*',
+        products: '*',
+      },
+    }
+    return strapi.entityService.findMany('api::order.order', ctx.query)
   }
 }));

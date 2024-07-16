@@ -1,15 +1,11 @@
-/**
- * payment service
- */
-
 import {factories} from '@strapi/strapi';
 
 type PaymentOrder = { id: string }
 
 export default factories.createCoreService('api::payment.payment', ({strapi}) => ({
-  async createPayment(paymentOrder: PaymentOrder, orderId: string) {
+  async createPayment(paymentOrder: PaymentOrder, orderId: string, ctx) {
     const order = await strapi.query('api::order.order').findOne({where: {id: orderId}})
-    const payment = await strapi.query('api::payment.payment').create({
+    const payment = await super.create({
       data: {
         order: order.id,
         paymentOrder: JSON.parse(JSON.stringify(paymentOrder)),
