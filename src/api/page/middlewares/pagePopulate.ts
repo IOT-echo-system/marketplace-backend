@@ -2,14 +2,19 @@ import {Strapi} from '@strapi/strapi';
 
 const populate = {
   header: {
-    populate: ['image', 'mobileImage', 'cta']
-  },
-  mainContent: {
     populate: {
-      cards: {
-        populate: 'image'
-      }
+      'hero-banner': '*'
     }
+  },
+  carousel: {
+    populate: {
+      cta: '*',
+      image: '*',
+      mobileImage: '*',
+    }
+  },
+  content: {
+    populate: '*'
   },
   ctaBanner: {
     populate: 'cta'
@@ -26,6 +31,6 @@ export default (config, {strapi}: { strapi: Strapi }) => {
       populate,
       ...ctx.query
     }
-     await next();
+    await next();
   };
 };

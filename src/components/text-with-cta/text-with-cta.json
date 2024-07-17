@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_text_with_cta_text_with_ctas",
+  "info": {
+    "displayName": "Text with cta",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "cta.cta",
+      "required": true
+    },
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

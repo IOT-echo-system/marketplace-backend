@@ -12,18 +12,38 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "header": {
-      "type": "dynamiczone",
-      "components": [
-        "hero-banner.hero-banner"
-      ]
-    },
     "name": {
       "type": "string"
     },
     "slug": {
       "type": "uid",
       "targetField": "name"
+    },
+    "carousel": {
+      "type": "dynamiczone",
+      "components": [
+        "hero-banner.hero-banner"
+      ],
+      "min": 2,
+      "max": 8
+    },
+    "header": {
+      "type": "dynamiczone",
+      "components": [
+        "hero-banner.hero-banner"
+      ]
+    },
+    "content": {
+      "type": "dynamiczone",
+      "components": [
+        "text-content.text-content"
+      ]
+    },
+    "ctaBanner": {
+      "type": "dynamiczone",
+      "components": [
+        "text-with-cta.text-with-cta"
+      ]
     }
   }
 }

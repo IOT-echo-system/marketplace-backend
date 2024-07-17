@@ -1000,9 +1000,19 @@ export interface ApiPagePage extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    header: Attribute.DynamicZone<['hero-banner.hero-banner']>;
     name: Attribute.String;
     slug: Attribute.UID<'api::page.page', 'name'>;
+    carousel: Attribute.DynamicZone<['hero-banner.hero-banner']> &
+      Attribute.SetMinMax<
+        {
+          min: 2;
+          max: 8;
+        },
+        number
+      >;
+    header: Attribute.DynamicZone<['hero-banner.hero-banner']>;
+    content: Attribute.DynamicZone<['text-content.text-content']>;
+    ctaBanner: Attribute.DynamicZone<['text-with-cta.text-with-cta']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

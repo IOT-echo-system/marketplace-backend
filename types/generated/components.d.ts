@@ -48,14 +48,15 @@ export interface CtaCta extends Schema.Component {
 export interface HeroBannerHeroBanner extends Schema.Component {
   collectionName: 'components_hero_banner_hero_banners';
   info: {
-    displayName: 'Hero Banner';
+    displayName: 'Hero banner';
     description: '';
   };
   attributes: {
-    title: Attribute.String;
-    subtitle: Attribute.String;
+    image: Attribute.Component<'image.image'> & Attribute.Required;
+    mobileImage: Attribute.Component<'image.image'>;
+    title: Attribute.Text;
+    subtitle: Attribute.Text;
     cta: Attribute.Component<'cta.cta'>;
-    image: Attribute.Component<'image.image'>;
     darkText: Attribute.Boolean & Attribute.DefaultTo<false>;
   };
 }
@@ -71,21 +72,10 @@ export interface ImageImage extends Schema.Component {
   };
 }
 
-export interface NavLinkNavLink extends Schema.Component {
-  collectionName: 'components_nav_link_nav_links';
-  info: {
-    displayName: 'NavLink';
-  };
-  attributes: {
-    label: Attribute.String & Attribute.Required;
-    link: Attribute.String & Attribute.Required;
-  };
-}
-
 export interface ProductProduct extends Schema.Component {
   collectionName: 'components_product_products';
   info: {
-    displayName: 'OrderProduct';
+    displayName: 'Order Product';
     description: '';
   };
   attributes: {
@@ -113,6 +103,36 @@ export interface ProductProduct extends Schema.Component {
   };
 }
 
+export interface TextContentTextContent extends Schema.Component {
+  collectionName: 'components_text_content_text_contents';
+  info: {
+    displayName: 'TextContent';
+  };
+  attributes: {
+    text: Attribute.RichText &
+      Attribute.Required &
+      Attribute.CustomField<
+        'plugin::ckeditor.CKEditor',
+        {
+          output: 'HTML';
+          preset: 'standard';
+        }
+      >;
+  };
+}
+
+export interface TextWithCtaTextWithCta extends Schema.Component {
+  collectionName: 'components_text_with_cta_text_with_ctas';
+  info: {
+    displayName: 'Text with cta';
+    description: '';
+  };
+  attributes: {
+    cta: Attribute.Component<'cta.cta'> & Attribute.Required;
+    text: Attribute.String & Attribute.Required;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
@@ -120,8 +140,9 @@ declare module '@strapi/types' {
       'cta.cta': CtaCta;
       'hero-banner.hero-banner': HeroBannerHeroBanner;
       'image.image': ImageImage;
-      'nav-link.nav-link': NavLinkNavLink;
       'product.product': ProductProduct;
+      'text-content.text-content': TextContentTextContent;
+      'text-with-cta.text-with-cta': TextWithCtaTextWithCta;
     }
   }
 }

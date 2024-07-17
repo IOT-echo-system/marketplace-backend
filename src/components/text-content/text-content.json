@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_text_content_text_contents",
+  "info": {
+    "displayName": "TextContent"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "customField",
+      "options": {
+        "output": "HTML",
+        "preset": "standard"
+      },
+      "required": true,
+      "customField": "plugin::ckeditor.CKEditor"
+    }
+  }
+}
