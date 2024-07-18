@@ -103,6 +103,40 @@ export interface ProductProduct extends Schema.Component {
   };
 }
 
+export interface SectionSection extends Schema.Component {
+  collectionName: 'components_section_sections';
+  info: {
+    displayName: 'Section';
+    description: '';
+  };
+  attributes: {
+    title: Attribute.String;
+    ctas: Attribute.Component<'cta.cta', true> &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 2;
+        },
+        number
+      >;
+  };
+}
+
+export interface SocialSocial extends Schema.Component {
+  collectionName: 'components_social_socials';
+  info: {
+    displayName: 'Social';
+    description: '';
+  };
+  attributes: {
+    icon: Attribute.Enumeration<
+      ['Facebook', 'Instagram', 'YouTube', 'LinkedIn']
+    > &
+      Attribute.Required;
+    cta: Attribute.Component<'cta.cta'> & Attribute.Required;
+  };
+}
+
 export interface TextContentTextContent extends Schema.Component {
   collectionName: 'components_text_content_text_contents';
   info: {
@@ -141,6 +175,8 @@ declare module '@strapi/types' {
       'hero-banner.hero-banner': HeroBannerHeroBanner;
       'image.image': ImageImage;
       'product.product': ProductProduct;
+      'section.section': SectionSection;
+      'social.social': SocialSocial;
       'text-content.text-content': TextContentTextContent;
       'text-with-cta.text-with-cta': TextWithCtaTextWithCta;
     }
