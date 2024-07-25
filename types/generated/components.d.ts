@@ -45,6 +45,17 @@ export interface CtaCta extends Schema.Component {
   };
 }
 
+export interface DiscountCouponDiscountCoupon extends Schema.Component {
+  collectionName: 'components_discount_coupon_discount_coupons';
+  info: {
+    displayName: 'Discount coupon';
+  };
+  attributes: {
+    code: Attribute.String & Attribute.Required;
+    discount: Attribute.Integer & Attribute.Required;
+  };
+}
+
 export interface HeroBannerHeroBanner extends Schema.Component {
   collectionName: 'components_hero_banner_hero_banners';
   info: {
@@ -172,6 +183,7 @@ declare module '@strapi/types' {
     export interface Components {
       'address.address': AddressAddress;
       'cta.cta': CtaCta;
+      'discount-coupon.discount-coupon': DiscountCouponDiscountCoupon;
       'hero-banner.hero-banner': HeroBannerHeroBanner;
       'image.image': ImageImage;
       'product.product': ProductProduct;

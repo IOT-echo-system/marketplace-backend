@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_discount_coupon_discount_coupons",
+  "info": {
+    "displayName": "Discount coupon"
+  },
+  "options": {},
+  "attributes": {
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "discount": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}

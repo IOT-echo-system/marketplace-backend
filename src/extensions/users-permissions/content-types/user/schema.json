@@ -80,11 +80,11 @@
       "target": "api::address.address",
       "mappedBy": "user"
     },
-    "orders": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::order.order",
-      "mappedBy": "user"
+    "customRole": {
+      "type": "enumeration",
+      "enum": [
+        "SELLER"
+      ]
     }
   }
 }

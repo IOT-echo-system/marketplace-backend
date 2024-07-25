@@ -13,15 +13,8 @@
   "pluginOptions": {},
   "attributes": {
     "amount": {
-      "type": "integer",
+      "type": "decimal",
       "required": true
-    },
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "private": true,
-      "inversedBy": "orders"
     },
     "products": {
       "displayName": "Product",
@@ -44,7 +37,7 @@
     "state": {
       "type": "enumeration",
       "enum": [
-        "CREATED",
+        "ORDER_NOT_PLACED",
         "PLACED",
         "DELIVERED",
         "CANCELLED"
@@ -56,6 +49,20 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::payment.payment"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "private": true
+    },
+    "discountCoupon": {
+      "displayName": "Discount",
+      "type": "component",
+      "component": "discount-coupon.discount-coupon"
+    },
+    "shippingCharge": {
+      "type": "integer"
     }
   }
 }

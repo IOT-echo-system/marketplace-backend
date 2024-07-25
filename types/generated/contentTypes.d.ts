@@ -784,11 +784,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::address.address'
     >;
-    orders: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::order.order'
-    >;
+    customRole: Attribute.Enumeration<['SELLER']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -859,6 +855,53 @@ export interface ApiAddressAddress extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::address.address',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiAddressBySellerAddressBySeller
+  extends Schema.CollectionType {
+  collectionName: 'address_by_sellers';
+  info: {
+    singularName: 'address-by-seller';
+    pluralName: 'address-by-sellers';
+    displayName: 'Address by seller';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    address1: Attribute.String & Attribute.Required;
+    address2: Attribute.String;
+    address3: Attribute.String;
+    city: Attribute.String & Attribute.Required;
+    state: Attribute.String & Attribute.Required;
+    district: Attribute.String & Attribute.Required;
+    pinCode: Attribute.Integer & Attribute.Required;
+    mobileNo: Attribute.BigInteger &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: '1000000000';
+          max: '9999999999';
+        },
+        string
+      >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::address-by-seller.address-by-seller',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::address-by-seller.address-by-seller',
       'oneToOne',
       'admin::user'
     > &
@@ -939,6 +982,38 @@ export interface ApiContactContact extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::contact.contact',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiDiscountCouponDiscountCoupon extends Schema.CollectionType {
+  collectionName: 'discount_coupons';
+  info: {
+    singularName: 'discount-coupon';
+    pluralName: 'discount-coupons';
+    displayName: 'Discount coupon';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    code: Attribute.String & Attribute.Required & Attribute.Unique;
+    discount: Attribute.Integer & Attribute.Required & Attribute.Unique;
+    active: Attribute.Boolean & Attribute.Required & Attribute.DefaultTo<false>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::discount-coupon.discount-coupon',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::discount-coupon.discount-coupon',
       'oneToOne',
       'admin::user'
     > &
@@ -1034,18 +1109,12 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    amount: Attribute.Integer & Attribute.Required;
-    user: Attribute.Relation<
-      'api::order.order',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    > &
-      Attribute.Private;
+    amount: Attribute.Decimal & Attribute.Required;
     products: Attribute.Component<'product.product', true> & Attribute.Required;
     billingAddress: Attribute.Component<'address.address'> & Attribute.Required;
     shippingAddress: Attribute.Component<'address.address'>;
     state: Attribute.Enumeration<
-      ['CREATED', 'PLACED', 'DELIVERED', 'CANCELLED']
+      ['ORDER_NOT_PLACED', 'PLACED', 'DELIVERED', 'CANCELLED']
     > &
       Attribute.Required &
       Attribute.DefaultTo<'CREATED'>;
@@ -1054,6 +1123,14 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'oneToOne',
       'api::payment.payment'
     >;
+    user: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    > &
+      Attribute.Private;
+    discountCoupon: Attribute.Component<'discount-coupon.discount-coupon'>;
+    shippingCharge: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1292,8 +1369,10 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::address.address': ApiAddressAddress;
+      'api::address-by-seller.address-by-seller': ApiAddressBySellerAddressBySeller;
       'api::category.category': ApiCategoryCategory;
       'api::contact.contact': ApiContactContact;
+      'api::discount-coupon.discount-coupon': ApiDiscountCouponDiscountCoupon;
       'api::footer.footer': ApiFooterFooter;
       'api::main-menu.main-menu': ApiMainMenuMainMenu;
       'api::order.order': ApiOrderOrder;
