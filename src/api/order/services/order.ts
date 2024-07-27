@@ -20,7 +20,7 @@ export default factories.createCoreService('api::order.order', ({strapi}) => ({
     const discountCoupon = await strapi.query('api::discount-coupon.discount-coupon').findOne({
       where: {code: data.discountCoupon.code, active: true}
     });
-    const amountAfterDiscount = amount - (amount * discountCoupon.discount / 100);
+    const amountAfterDiscount = amount - (amount * (discountCoupon?.discount ?? 0) / 100);
     const order = await super.create({
       data: {
         ...data,

@@ -18,5 +18,5 @@ export default ({env}) => ({
       defaultFrom: 'iot@robotutortech.com',
       defaultReplyTo: 'iot@robotutortech.com',
     },
-  },
+  }
 });
