@@ -1,7 +1,7 @@
-import path from 'path';
+import path from 'path'
 
 export default ({ env }) => {
-  const client = env('DATABASE_CLIENT', 'sqlite');
+  const client = env('DATABASE_CLIENT', 'sqlite')
 
   const connections = {
     mysql: {
@@ -81,7 +81,7 @@ export default ({ env }) => {
       },
       useNullAsDefault: true,
     },
-  };
+  }
 
   return {
     connection: {
@@ -89,5 +89,5 @@ export default ({ env }) => {
       ...connections[client],
       acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
     },
-  };
-};
+  }
+}

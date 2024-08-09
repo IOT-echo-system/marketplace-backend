@@ -3,9 +3,9 @@ import {factories} from '@strapi/strapi'
 export default factories.createCoreController('api::order.order', ({strapi}) => ({
   async create(ctx) {
     if (!ctx.state.user) {
-      return ctx.unauthorized('You must be logged in to create an order');
+      return ctx.unauthorized('You must be logged in to create an order')
     }
-    const orderService = strapi.service('api::order.order');
+    const orderService = strapi.service('api::order.order')
     try {
       return orderService.createOrder(ctx.request.body.data, ctx.state.user.id)
     } catch (error) {
@@ -21,10 +21,10 @@ export default factories.createCoreController('api::order.order', ({strapi}) => 
       populate: {
         shippingAddress: '*',
         billingAddress: '*',
-        discountCoupon: "*",
-        products: {populate: {featuredImage: '*'}},
-      },
+        discountCoupon: '*',
+        products: {populate: {featuredImage: '*'}}
+      }
     }
     return strapi.entityService.findMany('api::order.order', ctx.query)
-  },
-}));
+  }
+}))

@@ -1,4 +1,4 @@
-import {Strapi} from '@strapi/strapi';
+import type {Strapi} from '@strapi/strapi'
 
 const populate = {
   header: {
@@ -19,10 +19,10 @@ const populate = {
   }
 }
 
-export default (config, {strapi}: { strapi: Strapi }) => {
+export default (config, {strapi}: {strapi: Strapi}) => {
   return async (ctx, next) => {
     const link = ctx.query.filters.link.$eq
-    const categoryService = strapi.service('api::category.category');
-    ctx.body = await categoryService.findTree(link);
-  };
-};
+    const categoryService = strapi.service('api::category.category')
+    ctx.body = await categoryService.findTree(link)
+  }
+}

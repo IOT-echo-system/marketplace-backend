@@ -1,4 +1,4 @@
-import {Strapi} from '@strapi/strapi';
+import type {Strapi} from '@strapi/strapi'
 
 const populate = {
   header: {
@@ -19,10 +19,10 @@ const populate = {
   }
 }
 
-export default (config, {strapi}: { strapi: Strapi }) => {
+export default (config, {strapi}: {strapi: Strapi}) => {
   return async (ctx, next) => {
-    strapi.log.info('In mainMenuPopulate middleware.');
-    const mainMenuService = strapi.service('api::main-menu.main-menu');
-    ctx.body = await mainMenuService.findMenus();
-  };
-};
+    strapi.log.info('In mainMenuPopulate middleware.')
+    const mainMenuService = strapi.service('api::main-menu.main-menu')
+    ctx.body = await mainMenuService.findMenus()
+  }
+}

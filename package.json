@@ -8,7 +8,9 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "deploy": "strapi deploy"
+    "deploy": "strapi deploy",
+    "prettier:check": "prettier src --check",
+    "prettier:fix": "prettier src --write"
   },
   "dependencies": {
     "@ckeditor/strapi-plugin-ckeditor": "^0.0.12",
@@ -16,6 +18,8 @@
     "@strapi/plugin-i18n": "4.25.2",
     "@strapi/plugin-users-permissions": "4.25.2",
     "@strapi/strapi": "4.25.2",
+    "bcryptjs": "^2.4.3",
+    "nodemailer": "^6.9.14",
     "pg": "8.8.0",
     "razorpay": "^2.9.4",
     "react": "^18.0.0",
@@ -23,7 +27,8 @@
     "react-router-dom": "5.3.4",
     "strapi-plugin-ckeditor": "^0.1.0",
     "strapi-plugin-email": "^3.6.11",
-    "styled-components": "5.3.3"
+    "styled-components": "5.3.3",
+    "web-client-starter": "^0.0.5"
   },
   "author": {
     "name": "A Strapi developer"
@@ -38,5 +43,9 @@
   "license": "MIT",
   "workspaces": [
     "./src/plugins/strapi-plugin-ckeditor"
-  ]
+  ],
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.15",
+    "prettier": "^3.0.3"
+  }
 }

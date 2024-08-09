@@ -1,7 +1,7 @@
 export default ({env}) => ({
   ckeditor: {
     enabled: true,
-    resolve: "./src/plugins/strapi-plugin-ckeditor"
+    resolve: './src/plugins/strapi-plugin-ckeditor'
   },
   email: {
     provider: 'nodemailer',
@@ -19,4 +19,4 @@ export default ({env}) => ({
       defaultReplyTo: 'iot@robotutortech.com',
     },
   }
-});
+})

@@ -5,8 +5,8 @@ export default {
       path: '/search',
       handler: 'search.search',
       config: {
-        policies: [],
-      },
+        policies: []
+      }
     }
-  ],
-};
+  ]
+}

@@ -16,6 +16,10 @@
       "type": "decimal",
       "required": true
     },
+    "qty": {
+      "type": "integer",
+      "required": true
+    },
     "products": {
       "displayName": "Product",
       "type": "component",
@@ -36,12 +40,7 @@
     },
     "state": {
       "type": "enumeration",
-      "enum": [
-        "ORDER_NOT_PLACED",
-        "PLACED",
-        "DELIVERED",
-        "CANCELLED"
-      ],
+      "enum": ["ORDER_NOT_PLACED", "PLACED", "DELIVERED", "CANCELLED"],
       "required": true,
       "default": "CREATED"
     },

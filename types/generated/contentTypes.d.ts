@@ -1,4 +1,4 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Schema, Attribute } from '@strapi/strapi'
 
 export interface AdminPermission extends Schema.CollectionType {
   collectionName: 'admin_permissions';
@@ -406,8 +406,7 @@ export interface PluginUploadFile extends Schema.CollectionType {
       Attribute.SetMinMax<
         {
           min: 1;
-        },
-        number
+        }
       >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -447,8 +446,7 @@ export interface PluginUploadFolder extends Schema.CollectionType {
       Attribute.SetMinMax<
         {
           min: 1;
-        },
-        number
+        }
       >;
     pathId: Attribute.Integer & Attribute.Required & Attribute.Unique;
     parent: Attribute.Relation<
@@ -471,8 +469,7 @@ export interface PluginUploadFolder extends Schema.CollectionType {
       Attribute.SetMinMax<
         {
           min: 1;
-        },
-        number
+        }
       >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -616,8 +613,7 @@ export interface PluginI18NLocale extends Schema.CollectionType {
         {
           min: 1;
           max: 50;
-        },
-        number
+        }
       >;
     code: Attribute.String & Attribute.Unique;
     createdAt: Attribute.DateTime;
@@ -784,7 +780,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::address.address'
     >;
-    customRole: Attribute.Enumeration<['SELLER']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -965,8 +960,7 @@ export interface ApiContactContact extends Schema.CollectionType {
         {
           min: 1000000000;
           max: 9999999999;
-        },
-        number
+        }
       >;
     email: Attribute.Email & Attribute.Required;
     subject: Attribute.String;
@@ -1039,8 +1033,7 @@ export interface ApiFooterFooter extends Schema.SingleType {
         {
           min: 2;
           max: 4;
-        },
-        number
+        }
       >;
     copyright: Attribute.String;
     socials: Attribute.Component<'social.social', true>;
@@ -1110,6 +1103,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
   };
   attributes: {
     amount: Attribute.Decimal & Attribute.Required;
+    qty: Attribute.Integer & Attribute.Required;
     products: Attribute.Component<'product.product', true> & Attribute.Required;
     billingAddress: Attribute.Component<'address.address'> & Attribute.Required;
     shippingAddress: Attribute.Component<'address.address'>;
@@ -1168,8 +1162,7 @@ export interface ApiPagePage extends Schema.CollectionType {
         {
           min: 2;
           max: 8;
-        },
-        number
+        }
       >;
     header: Attribute.DynamicZone<['hero-banner.hero-banner']>;
     content: Attribute.DynamicZone<['text-content.text-content']>;
@@ -1296,6 +1289,36 @@ export interface ApiProductProduct extends Schema.CollectionType {
   };
 }
 
+export interface ApiShippingShipping extends Schema.CollectionType {
+  collectionName: 'shippings';
+  info: {
+    singularName: 'shipping';
+    pluralName: 'shippings';
+    displayName: 'Shipping';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    awbNo: Attribute.String & Attribute.Required & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::shipping.shipping',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::shipping.shipping',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiSiteInfoSiteInfo extends Schema.SingleType {
   collectionName: 'site_infos';
   info: {
@@ -1327,6 +1350,36 @@ export interface ApiSiteInfoSiteInfo extends Schema.SingleType {
   };
 }
 
+export interface ApiStoreLocationStoreLocation extends Schema.SingleType {
+  collectionName: 'store_locations';
+  info: {
+    singularName: 'store-location';
+    pluralName: 'store-locations';
+    displayName: 'Store location';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    location: Attribute.Component<'address.address'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::store-location.store-location',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::store-location.store-location',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiTagTag extends Schema.CollectionType {
   collectionName: 'tags';
   info: {
@@ -1351,7 +1404,7 @@ export interface ApiTagTag extends Schema.CollectionType {
 }
 
 declare module '@strapi/types' {
-  export module Shared {
+  export namespace Shared {
     export interface ContentTypes {
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
@@ -1379,7 +1432,9 @@ declare module '@strapi/types' {
       'api::page.page': ApiPagePage;
       'api::payment.payment': ApiPaymentPayment;
       'api::product.product': ApiProductProduct;
+      'api::shipping.shipping': ApiShippingShipping;
       'api::site-info.site-info': ApiSiteInfoSiteInfo;
+      'api::store-location.store-location': ApiStoreLocationStoreLocation;
       'api::tag.tag': ApiTagTag;
     }
   }

@@ -34,12 +34,7 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": [
-        "CREATED",
-        "ATTEMPT",
-        "FAILURE",
-        "SUCCESS"
-      ],
+      "enum": ["CREATED", "ATTEMPT", "FAILURE", "SUCCESS"],
       "required": true
     },
     "orderId": {

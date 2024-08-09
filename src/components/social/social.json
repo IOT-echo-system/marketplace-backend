@@ -8,12 +8,7 @@
   "attributes": {
     "icon": {
       "type": "enumeration",
-      "enum": [
-        "Facebook",
-        "Instagram",
-        "YouTube",
-        "LinkedIn"
-      ],
+      "enum": ["Facebook", "Instagram", "YouTube", "LinkedIn"],
       "required": true
     },
     "cta": {

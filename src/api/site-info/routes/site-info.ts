@@ -2,6 +2,6 @@
  * site-info router
  */
 
-import { factories } from '@strapi/strapi';
+import {factories} from '@strapi/strapi'
 
-export default factories.createCoreRouter('api::site-info.site-info');
+export default factories.createCoreRouter('api::site-info.site-info')

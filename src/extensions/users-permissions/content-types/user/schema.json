@@ -79,12 +79,6 @@
       "relation": "oneToMany",
       "target": "api::address.address",
       "mappedBy": "user"
-    },
-    "customRole": {
-      "type": "enumeration",
-      "enum": [
-        "SELLER"
-      ]
     }
   }
 }

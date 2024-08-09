@@ -6,8 +6,8 @@ export default {
       handler: 'payment.verifyPayment',
       config: {
         policies: [],
-        middlewares: [],
-      },
-    },
-  ],
-};
+        middlewares: []
+      }
+    }
+  ]
+}

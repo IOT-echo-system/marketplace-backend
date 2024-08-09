@@ -1,4 +1,4 @@
-import {Strapi} from '@strapi/strapi';
+import type {Strapi} from '@strapi/strapi'
 
 const populate = {
   header: {
@@ -10,7 +10,7 @@ const populate = {
     populate: {
       cta: '*',
       image: '*',
-      mobileImage: '*',
+      mobileImage: '*'
     }
   },
   content: {
@@ -24,13 +24,13 @@ const populate = {
   }
 }
 
-export default (config, {strapi}: { strapi: Strapi }) => {
+export default (config, {strapi}: {strapi: Strapi}) => {
   return async (ctx, next) => {
-    strapi.log.info('In pagePopulate middleware.');
+    strapi.log.info('In pagePopulate middleware.')
     ctx.query = {
       populate,
       ...ctx.query
     }
-    await next();
-  };
-};
+    await next()
+  }
+}

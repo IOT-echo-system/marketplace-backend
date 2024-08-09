@@ -2,6 +2,6 @@
  * discount-coupon service
  */
 
-import { factories } from '@strapi/strapi';
+import {factories} from '@strapi/strapi'
 
-export default factories.createCoreService('api::discount-coupon.discount-coupon');
+export default factories.createCoreService('api::discount-coupon.discount-coupon')

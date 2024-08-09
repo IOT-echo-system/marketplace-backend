@@ -1,4 +1,4 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Schema, Attribute } from '@strapi/strapi'
 
 export interface AddressAddress extends Schema.Component {
   collectionName: 'components_address_addresses';
@@ -19,8 +19,7 @@ export interface AddressAddress extends Schema.Component {
         {
           min: 100000;
           max: 999999;
-        },
-        number
+        }
       >;
     mobileNo: Attribute.BigInteger &
       Attribute.Required &
@@ -96,16 +95,14 @@ export interface ProductProduct extends Schema.Component {
       Attribute.SetMinMax<
         {
           min: 1;
-        },
-        number
+        }
       >;
     qty: Attribute.Integer &
       Attribute.Required &
       Attribute.SetMinMax<
         {
           min: 1;
-        },
-        number
+        }
       >;
     shortDescription: Attribute.Text;
     featuredImage: Attribute.Component<'image.image'>;
@@ -127,8 +124,7 @@ export interface SectionSection extends Schema.Component {
       Attribute.SetMinMax<
         {
           min: 2;
-        },
-        number
+        }
       >;
   };
 }
@@ -179,7 +175,7 @@ export interface TextWithCtaTextWithCta extends Schema.Component {
 }
 
 declare module '@strapi/types' {
-  export module Shared {
+  export namespace Shared {
     export interface Components {
       'address.address': AddressAddress;
       'cta.cta': CtaCta;

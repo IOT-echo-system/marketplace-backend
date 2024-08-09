@@ -1,0 +1,20 @@
+{
+  "kind": "singleType",
+  "collectionName": "store_locations",
+  "info": {
+    "singularName": "store-location",
+    "pluralName": "store-locations",
+    "displayName": "Store location"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "location": {
+      "type": "component",
+      "repeatable": false,
+      "component": "address.address"
+    }
+  }
+}
