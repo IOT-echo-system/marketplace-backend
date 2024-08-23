@@ -1,0 +1,4 @@
+fileignoreconfig:
+- filename: types/generated/contentTypes.d.ts
+  checksum: 6ac672b66ba4fd0bb4a1b3cc6fe9dc707246ab0401d596e7f9ad0335c28358e5
+version: ""
