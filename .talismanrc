@@ -1,4 +1,8 @@
 fileignoreconfig:
 - filename: types/generated/contentTypes.d.ts
   checksum: 6ac672b66ba4fd0bb4a1b3cc6fe9dc707246ab0401d596e7f9ad0335c28358e5
+- filename: strapi-plugin-ckeditor/yarn.lock
+  checksum: 75994af0665b74303866cb7d0f89bfffe74fb0e1f8b8130c2677927d16570202
+- filename: strapi-plugin-ckeditor/admin/src/index.js
+  checksum: 25b38092a60a548ff6bdbe897dc78b87d26d1505b2fcfe6e89c793504872b78d
 version: ""
