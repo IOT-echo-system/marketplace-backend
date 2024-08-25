@@ -26,6 +26,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
+    "sharp": "^0.33.5",
     "strapi-plugin-ckeditor": "^0.1.0",
     "strapi-plugin-email": "^3.6.11",
     "styled-components": "5.3.3",

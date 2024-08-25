@@ -5,4 +5,6 @@ fileignoreconfig:
   checksum: 75994af0665b74303866cb7d0f89bfffe74fb0e1f8b8130c2677927d16570202
 - filename: strapi-plugin-ckeditor/admin/src/index.js
   checksum: 25b38092a60a548ff6bdbe897dc78b87d26d1505b2fcfe6e89c793504872b78d
+- filename: package-lock.json
+  checksum: 7cdec1f992d3128cdf86f9c6377ca664141ad1031cbe3e54a9f12facfa2a7176
 version: ""
