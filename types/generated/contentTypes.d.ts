@@ -701,7 +701,7 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
     draftAndPublish: true
   }
   attributes: {
-    name: Attribute.String & Attribute.Required & Attribute.Unique
+    name: Attribute.String & Attribute.Required
     link: Attribute.UID<'api::category.category', 'name'> & Attribute.Required
     parent: Attribute.Relation<'api::category.category', 'oneToOne', 'api::category.category'>
     createdAt: Attribute.DateTime
