@@ -44,6 +44,12 @@
       "required": true,
       "default": "CREATED"
     },
+    "type": {
+      "type": "enumeration",
+      "enum": ["ONLINE", "SELLER", "STORE_PICKUP"],
+      "required": true,
+      "default": "SELLER"
+    },
     "payment": {
       "type": "relation",
       "relation": "oneToOne",

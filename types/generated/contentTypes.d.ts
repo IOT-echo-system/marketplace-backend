@@ -596,7 +596,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         },
         string
       >
-    name: Attribute.String & Attribute.Required
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     addresses: Attribute.Relation<'plugin::users-permissions.user', 'oneToMany', 'api::address.address'>
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
@@ -617,12 +621,28 @@ export interface ApiAddressAddress extends Schema.CollectionType {
     draftAndPublish: true
   }
   attributes: {
-    name: Attribute.String & Attribute.Required
-    address1: Attribute.String & Attribute.Required
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    address1: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     address2: Attribute.String
     address3: Attribute.String
-    city: Attribute.String & Attribute.Required
-    state: Attribute.String & Attribute.Required
+    city: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    state: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     mobileNo: Attribute.BigInteger &
       Attribute.Required &
       Attribute.SetMinMax<
@@ -642,7 +662,11 @@ export interface ApiAddressAddress extends Schema.CollectionType {
         string
       >
     user: Attribute.Relation<'api::address.address', 'manyToOne', 'plugin::users-permissions.user'>
-    district: Attribute.String & Attribute.Required
+    district: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     publishedAt: Attribute.DateTime
@@ -662,13 +686,33 @@ export interface ApiAddressBySellerAddressBySeller extends Schema.CollectionType
     draftAndPublish: true
   }
   attributes: {
-    name: Attribute.String & Attribute.Required
-    address1: Attribute.String & Attribute.Required
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    address1: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     address2: Attribute.String
     address3: Attribute.String
-    city: Attribute.String & Attribute.Required
-    state: Attribute.String & Attribute.Required
-    district: Attribute.String & Attribute.Required
+    city: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    state: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    district: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     pinCode: Attribute.Integer & Attribute.Required
     mobileNo: Attribute.BigInteger &
       Attribute.Required &
@@ -701,7 +745,11 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
     draftAndPublish: true
   }
   attributes: {
-    name: Attribute.String & Attribute.Required
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     link: Attribute.UID<'api::category.category', 'name'> & Attribute.Required
     parent: Attribute.Relation<'api::category.category', 'oneToOne', 'api::category.category'>
     createdAt: Attribute.DateTime
@@ -724,7 +772,11 @@ export interface ApiContactContact extends Schema.CollectionType {
     draftAndPublish: true
   }
   attributes: {
-    name: Attribute.String & Attribute.Required
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     phone: Attribute.BigInteger &
       Attribute.Required &
       Attribute.SetMinMax<
@@ -839,6 +891,9 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     state: Attribute.Enumeration<['ORDER_NOT_PLACED', 'PLACED', 'DELIVERED', 'CANCELLED']> &
       Attribute.Required &
       Attribute.DefaultTo<'CREATED'>
+    type: Attribute.Enumeration<['ONLINE', 'SELLER', 'STORE_PICKUP']> &
+      Attribute.Required &
+      Attribute.DefaultTo<'SELLER'>
     payment: Attribute.Relation<'api::order.order', 'oneToOne', 'api::payment.payment'>
     user: Attribute.Relation<'api::order.order', 'oneToOne', 'plugin::users-permissions.user'> & Attribute.Private
     discountCoupon: Attribute.Component<'discount-coupon.discount-coupon'>
@@ -923,7 +978,11 @@ export interface ApiProductProduct extends Schema.CollectionType {
     draftAndPublish: true
   }
   attributes: {
-    title: Attribute.String & Attribute.Required
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     slug: Attribute.UID<'api::product.product', 'title'> & Attribute.Required
     price: Attribute.Decimal & Attribute.Required & Attribute.DefaultTo<0>
     availableQty: Attribute.Integer & Attribute.Required & Attribute.DefaultTo<0>
@@ -990,7 +1049,11 @@ export interface ApiSiteInfoSiteInfo extends Schema.SingleType {
     draftAndPublish: true
   }
   attributes: {
-    title: Attribute.String & Attribute.Required
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     subtitle: Attribute.String
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime

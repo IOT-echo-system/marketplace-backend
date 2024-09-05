@@ -72,8 +72,8 @@
     },
     "name": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "addresses": {
       "type": "relation",
       "relation": "oneToMany",

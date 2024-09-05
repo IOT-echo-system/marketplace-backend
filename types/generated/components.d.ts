@@ -10,9 +10,21 @@ export interface AddressAddress extends Schema.Component {
     address1: Attribute.String & Attribute.Required
     address2: Attribute.String
     address3: Attribute.String
-    city: Attribute.String & Attribute.Required
-    district: Attribute.String & Attribute.Required
-    state: Attribute.String & Attribute.Required
+    city: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    district: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    state: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     pinCode: Attribute.Integer &
       Attribute.Required &
       Attribute.SetMinMax<
@@ -40,8 +52,16 @@ export interface CtaCta extends Schema.Component {
     displayName: 'CTA'
   }
   attributes: {
-    label: Attribute.String & Attribute.Required
-    link: Attribute.String & Attribute.Required
+    label: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    link: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
   }
 }
 
@@ -51,7 +71,11 @@ export interface DiscountCouponDiscountCoupon extends Schema.Component {
     displayName: 'Discount coupon'
   }
   attributes: {
-    code: Attribute.String & Attribute.Required
+    code: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     discount: Attribute.Integer & Attribute.Required
   }
 }
@@ -78,7 +102,11 @@ export interface ImageImage extends Schema.Component {
     displayName: 'Image'
   }
   attributes: {
-    link: Attribute.String & Attribute.Required
+    link: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     altText: Attribute.String
   }
 }
@@ -90,7 +118,11 @@ export interface ProductProduct extends Schema.Component {
     description: ''
   }
   attributes: {
-    title: Attribute.String & Attribute.Required
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
     price: Attribute.Decimal &
       Attribute.Required &
       Attribute.SetMinMax<
@@ -109,8 +141,16 @@ export interface ProductProduct extends Schema.Component {
       >
     shortDescription: Attribute.Text
     featuredImage: Attribute.Component<'image.image'>
-    slug: Attribute.String & Attribute.Required
-    productId: Attribute.String & Attribute.Required
+    slug: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
+    productId: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
   }
 }
 
@@ -171,7 +211,11 @@ export interface TextWithCtaTextWithCta extends Schema.Component {
   }
   attributes: {
     cta: Attribute.Component<'cta.cta'> & Attribute.Required
-    text: Attribute.String & Attribute.Required
+    text: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1
+      }>
   }
 }
 

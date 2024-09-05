@@ -9,6 +9,14 @@ export default ({strapi}) => {
 
     getOrder(ctx) {
       return sellerService.getOrder(ctx)
+    },
+
+    markAsDelivered(ctx) {
+      return sellerService.markAsDelivered(ctx)
+    },
+
+    createOrder(ctx) {
+      return sellerService.createOrder(ctx)
     }
   }
 }

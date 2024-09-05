@@ -14,8 +14,8 @@
   "attributes": {
     "title": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "slug": {
       "type": "uid",
       "targetField": "title",

@@ -7,11 +7,11 @@
   "attributes": {
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
     },
     "address1": {
       "type": "string",
-      "required": true
+      "required": true,
     },
     "address2": {
       "type": "string"
@@ -21,16 +21,16 @@
     },
     "city": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "district": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "state": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "pinCode": {
       "type": "integer",
       "required": true,

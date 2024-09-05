@@ -8,8 +8,8 @@
   "attributes": {
     "title": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "price": {
       "type": "decimal",
       "required": true,
@@ -30,11 +30,11 @@
     },
     "slug": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "productId": {
       "type": "string",
-      "required": true
-    }
+      "required": true,
+      "minLength": 1    }
   }
 }

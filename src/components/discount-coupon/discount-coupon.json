@@ -7,8 +7,8 @@
   "attributes": {
     "code": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "discount": {
       "type": "integer",
       "required": true

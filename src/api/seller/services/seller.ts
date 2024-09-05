@@ -13,17 +13,13 @@ const SellerService = ({strapi}) => ({
 
     const query = {
       sort: [`${sort.sortBy}:${sort.order}`],
-      filters: !filter.filterBy
-        ? {}
-        : {
-            [filter.filterBy]: {
-              $eq: filter.value
-            }
-          },
-      pagination: {
-        pageSize: 100,
-        page: page
-      }
+      filters: {
+        ...(!filter.filterBy || !filter.value
+          ? {}
+          : {[filter.filterBy]: {$eq: filter.value}}),
+        ...(filter.type ? {type: filter.type} : {})
+      },
+      pagination: {pageSize: 100, page: page}
     }
     return strapi.service('api::order.order').find(query)
   },
@@ -35,9 +31,25 @@ const SellerService = ({strapi}) => ({
         products: '*',
         payment: '*',
         shippingAddress: '*',
-        billingAddress: '*'
+        billingAddress: '*',
+        discountCoupon: '*'
       }
     })
+  },
+
+  async markAsDelivered(ctx) {
+    return strapi.query('api::order.order').update({
+      where: {id: ctx.request.params.orderId},
+      data: {state: 'DELIVERED'}
+    })
+  },
+
+  async createOrder(ctx) {
+    const body = ctx.request.body
+    ctx.request.body = {data: body.billingAddress}
+    const address = await strapi.controller('api::address-by-seller.address-by-seller').createAddress(ctx)
+    // await strapi.controller('api::order.order').create(ctx)
+    return address
   }
 })
 

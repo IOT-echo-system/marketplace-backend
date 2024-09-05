@@ -11,16 +11,22 @@ const razorpay = new Razorpay({
 
 export default factories.createCoreService('api::payment.payment', ({strapi}) => ({
   async initiatePayment(orderId: number, amount: number) {
-    const options = {amount: amount * 100, currency: 'INR', receipt: `payment-${orderId}`}
-    const paymentOrder = await razorpay.orders.create(options)
-    return super.create({
-      data: {
-        order: orderId,
-        paymentOrder: paymentOrder,
-        orderId: paymentOrder.id,
-        status: 'CREATED'
-      }
-    })
+    const options = {amount: Math.floor(amount * 100), currency: 'INR', receipt: `payment-${orderId}`}
+    try {
+
+      const paymentOrder = await razorpay.orders.create(options)
+      console.log(paymentOrder)
+      return super.create({
+        data: {
+          order: orderId,
+          paymentOrder: paymentOrder,
+          orderId: paymentOrder.id,
+          status: 'CREATED'
+        }
+      })
+    } catch (error) {
+      console.log(JSON.stringify(error, null, 2))
+    }
   },
 
   async updateVerify(params: {razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string}) {

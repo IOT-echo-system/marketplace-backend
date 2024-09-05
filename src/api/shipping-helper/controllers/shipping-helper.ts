@@ -12,5 +12,10 @@ export default factories.createCoreController('api::shipping.shipping', ({strapi
       return ctx.throws(new Error('pincode required!!'))
     }
     return ShippingHelperService({strapi}).estimateDelivery(pincode)
-  }
+  },
+
+  createOrder(ctx) {
+    ShippingHelperService({strapi}).createOrder(ctx.request.body)
+    return ""
+  },
 }))

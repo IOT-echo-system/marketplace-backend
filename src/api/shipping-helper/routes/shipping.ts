@@ -12,6 +12,15 @@ export default {
         policies: [],
         middlewares: []
       }
+    },
+    {
+      method: 'POST',
+      path: '/shipping/orders',
+      handler: 'shipping-helper.createOrder',
+      config: {
+        policies: [],
+        middlewares: []
+      }
     }
   ]
 }

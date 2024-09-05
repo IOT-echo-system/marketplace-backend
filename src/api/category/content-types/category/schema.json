@@ -14,8 +14,8 @@
   "attributes": {
     "name": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "link": {
       "type": "uid",
       "targetField": "name",

@@ -14,12 +14,12 @@
   "attributes": {
     "name": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "address1": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "address2": {
       "type": "string"
     },
@@ -28,12 +28,12 @@
     },
     "city": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "state": {
       "type": "string",
-      "required": true
-    },
+      "required": true,
+      "minLength": 1    },
     "mobileNo": {
       "type": "biginteger",
       "required": true,
@@ -54,7 +54,7 @@
     },
     "district": {
       "type": "string",
-      "required": true
-    }
+      "required": true,
+      "minLength": 1    }
   }
 }

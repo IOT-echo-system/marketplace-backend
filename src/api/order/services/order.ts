@@ -29,16 +29,17 @@ export default factories.createCoreService('api::order.order', ({strapi}) => ({
       where: {code: data.discountCoupon?.code, active: true}
     })
     const amountAfterDiscount = amount - (amount * (discountCoupon?.discount ?? 0)) / 100
+    const shippingCharge = (data.type === 'ONLINE' && amountAfterDiscount < +(process.env.FREE_DELIVERY_THRESHOLD ?? 2000)) ? 99 : 0
     const order = await super.create({
       data: {
         ...data,
         state: 'ORDER_NOT_PLACED',
         products: productsWithQty,
         user: userId,
-        amount: amountAfterDiscount * 1.18 + (amountAfterDiscount >= 2000 ? 0 : 99),
+        amount: amountAfterDiscount * 1.18 + shippingCharge,
         qty,
         discountCoupon,
-        shippingCharge: amountAfterDiscount >= 2000 ? 0 : 99
+        shippingCharge
       }
     })
 
