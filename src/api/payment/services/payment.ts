@@ -1,6 +1,9 @@
 import {factories} from '@strapi/strapi'
 import Razorpay from 'razorpay'
 import crypto from 'crypto'
+import {VerifyPaymentRequest} from './types/payment'
+import {uuid4} from '@sentry/utils'
+import {PaymentLinks} from 'razorpay/dist/types/paymentLink'
 
 type PaymentOrder = {id: string}
 
@@ -10,18 +13,18 @@ const razorpay = new Razorpay({
 })
 
 export default factories.createCoreService('api::payment.payment', ({strapi}) => ({
-  async initiatePayment(orderId: number, amount: number) {
+  async initiatePayment(orderId: number, amount: number, paymentMode: 'CASH' | 'COD' | 'RAZORPAY') {
     const options = {amount: Math.floor(amount * 100), currency: 'INR', receipt: `payment-${orderId}`}
     try {
 
       const paymentOrder = await razorpay.orders.create(options)
-      console.log(paymentOrder)
       return super.create({
         data: {
           order: orderId,
           paymentOrder: paymentOrder,
           orderId: paymentOrder.id,
-          status: 'CREATED'
+          status: 'CREATED',
+          mode: paymentMode
         }
       })
     } catch (error) {
@@ -77,6 +80,84 @@ export default factories.createCoreService('api::payment.payment', ({strapi}) =>
     return strapi.query('api::order.order').update({
       where: {id: payment.order.id},
       data: {state: 'PAYMENT_FAILED'}
+    })
+  },
+
+  async createPaymentLink(orderId: string) {
+    const order = await strapi.service('api::order.order').findOne(orderId, {
+      populate: {billingAddress: '*', user: '*'}
+    })
+    try {
+      const response = await razorpay.paymentLink.create({
+        amount: Math.floor(order.amount * 100),
+        upi_link: process.env.NODE_ENV === 'production',
+        currency: 'INR',
+        accept_partial: false,
+        description: `Payment for Order ${orderId}`,
+        reference_id: uuid4(),
+        customer: {
+          name: order.billingAddress.name,
+          contact: `+91${order.billingAddress.mobileNo}`,
+          email: order.user.email
+        },
+        notify: {
+          sms: true,
+          email: true
+        },
+        reminder_enable: true,
+        callback_url: `${process.env.FRONTEND_URL}/profile/orders/${orderId}/payment`,
+        callback_method: 'get'
+      })
+      return strapi.query('api::payment.payment').update({
+        where: {order: orderId},
+        data: {paymentOrder: response, paymentLinkId: response.id, mode: 'RAZORPAY'}
+      })
+    } catch (error) {
+      console.log(error, 'error')
+    }
+  },
+
+  async verifyPaymentByLink(orderId: number, values: VerifyPaymentRequest) {
+    const payment = await strapi.query('api::payment.payment').findOne({where: {order: orderId}})
+    if (payment.paymentOrder.reference_id === values.razorpay_payment_link_reference_id) {
+      const response = await razorpay.paymentLink.fetch(payment.paymentLinkId) as PaymentLinks.RazorpayPaymentLink & {
+        order_id: string
+      }
+      await strapi.query('api::payment.payment').update({
+        where: {order: orderId},
+        data: {
+          verify: values,
+          finalState: response,
+          orderId: response.order_id,
+          paymentId: response.payments[0].payment_id,
+          status: response.payments[0].status === 'captured' ? 'SUCCESS' : 'FAILURE'
+        }
+      })
+      return response.payments[0].status === 'captured' ? 'SUCCESS' : 'FAILURE'
+    }
+    return 'FAILURE'
+  },
+
+  async updatePaymentStatus(orderId: number) {
+    const payment = await strapi.query('api::payment.payment').findOne({where: {order: orderId}})
+    const response = await razorpay.paymentLink.fetch(payment.paymentOrder.id) as PaymentLinks.RazorpayPaymentLink & {
+      order_id: string
+    }
+    await strapi.query('api::payment.payment').update({
+      where: {order: orderId},
+      data: {
+        finalState: response,
+        orderId: response.order_id,
+        paymentId: response.payments[0].payment_id,
+        status: response.payments[0].status === 'captured' ? 'SUCCESS' : 'FAILURE'
+      }
+    })
+  },
+
+  async updateAsCashCollected(ctx) {
+    await strapi.query('api::payment.payment').update({
+      where: {order: ctx.request.params.orderId},
+      data: {status: 'SUCCESS', mode: 'CASH', collectedBy: ctx.state.user.id}
     })
   }
 }))

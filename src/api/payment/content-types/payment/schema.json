@@ -17,6 +17,21 @@
       "relation": "oneToOne",
       "target": "api::order.order"
     },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "discount": {
+      "type": "decimal",
+      "required": true
+    },
+    "gst": {
+      "type": "decimal"
+    },
+    "grandTotal": {
+      "type": "decimal",
+      "required": true
+    },
     "verify": {
       "type": "json"
     },
@@ -34,13 +49,34 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": ["CREATED", "ATTEMPT", "FAILURE", "SUCCESS"],
+      "enum": [
+        "CREATED",
+        "ATTEMPT",
+        "FAILURE",
+        "SUCCESS"
+      ],
       "required": true
     },
     "orderId": {
       "type": "string",
       "required": true,
       "unique": true
+    },
+    "mode": {
+      "type": "enumeration",
+      "enum": [
+        "CASH",
+        "COD",
+        "RAZORPAY"
+      ],
+      "default": "RAZORPAY",
+      "required": true
+    },
+    "collectedBy": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "payment"
     }
   }
 }

@@ -1,17 +1,22 @@
 {
   "collectionName": "components_discount_coupon_discount_coupons",
   "info": {
-    "displayName": "Discount coupon"
+    "displayName": "Discount coupon",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "code": {
       "type": "string",
       "required": true,
-      "minLength": 1    },
+      "minLength": 1
+    },
     "discount": {
-      "type": "integer",
+      "type": "decimal",
       "required": true
+    },
+    "amount": {
+      "type": "decimal"
     }
   }
 }

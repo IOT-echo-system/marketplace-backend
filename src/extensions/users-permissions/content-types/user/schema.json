@@ -73,12 +73,19 @@
     "name": {
       "type": "string",
       "required": true,
-      "minLength": 1    },
+      "minLength": 1
+    },
     "addresses": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::address.address",
       "mappedBy": "user"
+    },
+    "payment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::payment.payment",
+      "mappedBy": "collectedBy"
     }
   }
 }

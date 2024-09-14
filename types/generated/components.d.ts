@@ -69,6 +69,7 @@ export interface DiscountCouponDiscountCoupon extends Schema.Component {
   collectionName: 'components_discount_coupon_discount_coupons'
   info: {
     displayName: 'Discount coupon'
+    description: ''
   }
   attributes: {
     code: Attribute.String &
@@ -76,7 +77,8 @@ export interface DiscountCouponDiscountCoupon extends Schema.Component {
       Attribute.SetMinMaxLength<{
         minLength: 1
       }>
-    discount: Attribute.Integer & Attribute.Required
+    discount: Attribute.Decimal & Attribute.Required
+    amount: Attribute.Decimal
   }
 }
 

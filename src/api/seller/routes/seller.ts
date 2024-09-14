@@ -31,6 +31,30 @@ export default {
       config: {
         policies: []
       }
+    },
+    {
+      method: 'PUT',
+      path: '/seller/orders/:orderId/pay-and-deliver',
+      handler: 'seller.payAndDeliver',
+      config: {
+        policies: []
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/seller/orders/:orderId/verify-payment',
+      handler: 'seller.verifyPayment',
+      config: {
+        policies: []
+      }
+    },
+    {
+      method: 'GET',
+      path: '/seller/orders/:orderId/payment-status',
+      handler: 'seller.paymentStatus',
+      config: {
+        policies: []
+      }
     }
   ]
 }

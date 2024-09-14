@@ -602,6 +602,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         minLength: 1
       }>
     addresses: Attribute.Relation<'plugin::users-permissions.user', 'oneToMany', 'api::address.address'>
+    payment: Attribute.Relation<'plugin::users-permissions.user', 'oneToOne', 'api::payment.payment'>
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     createdBy: Attribute.Relation<'plugin::users-permissions.user', 'oneToOne', 'admin::user'> & Attribute.Private
@@ -681,6 +682,7 @@ export interface ApiAddressBySellerAddressBySeller extends Schema.CollectionType
     singularName: 'address-by-seller'
     pluralName: 'address-by-sellers'
     displayName: 'Address by seller'
+    description: ''
   }
   options: {
     draftAndPublish: true
@@ -714,15 +716,7 @@ export interface ApiAddressBySellerAddressBySeller extends Schema.CollectionType
         minLength: 1
       }>
     pinCode: Attribute.Integer & Attribute.Required
-    mobileNo: Attribute.BigInteger &
-      Attribute.Required &
-      Attribute.SetMinMax<
-        {
-          min: '1000000000'
-          max: '9999999999'
-        },
-        string
-      >
+    mobileNo: Attribute.BigInteger & Attribute.Required & Attribute.Unique
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     publishedAt: Attribute.DateTime
@@ -850,6 +844,26 @@ export interface ApiFooterFooter extends Schema.SingleType {
   }
 }
 
+export interface ApiInvoiceInvoice extends Schema.CollectionType {
+  collectionName: 'invoices'
+  info: {
+    singularName: 'invoice'
+    pluralName: 'invoices'
+    displayName: 'Invoice'
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    order: Attribute.Relation<'api::invoice.invoice', 'oneToOne', 'api::order.order'>
+    createdAt: Attribute.DateTime
+    updatedAt: Attribute.DateTime
+    publishedAt: Attribute.DateTime
+    createdBy: Attribute.Relation<'api::invoice.invoice', 'oneToOne', 'admin::user'> & Attribute.Private
+    updatedBy: Attribute.Relation<'api::invoice.invoice', 'oneToOne', 'admin::user'> & Attribute.Private
+  }
+}
+
 export interface ApiMainMenuMainMenu extends Schema.SingleType {
   collectionName: 'main_menus'
   info: {
@@ -887,7 +901,6 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     qty: Attribute.Integer & Attribute.Required
     products: Attribute.Component<'product.product', true> & Attribute.Required
     billingAddress: Attribute.Component<'address.address'> & Attribute.Required
-    shippingAddress: Attribute.Component<'address.address'>
     state: Attribute.Enumeration<['ORDER_NOT_PLACED', 'PLACED', 'DELIVERED', 'CANCELLED']> &
       Attribute.Required &
       Attribute.DefaultTo<'CREATED'>
@@ -896,8 +909,8 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       Attribute.DefaultTo<'SELLER'>
     payment: Attribute.Relation<'api::order.order', 'oneToOne', 'api::payment.payment'>
     user: Attribute.Relation<'api::order.order', 'oneToOne', 'plugin::users-permissions.user'> & Attribute.Private
-    discountCoupon: Attribute.Component<'discount-coupon.discount-coupon'>
-    shippingCharge: Attribute.Integer
+    invoice: Attribute.Relation<'api::order.order', 'oneToOne', 'api::invoice.invoice'>
+    shipping: Attribute.Relation<'api::order.order', 'oneToOne', 'api::shipping.shipping'>
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     publishedAt: Attribute.DateTime
@@ -952,12 +965,18 @@ export interface ApiPaymentPayment extends Schema.CollectionType {
   }
   attributes: {
     order: Attribute.Relation<'api::payment.payment', 'oneToOne', 'api::order.order'>
+    amount: Attribute.Decimal & Attribute.Required
+    discount: Attribute.Decimal & Attribute.Required
+    gst: Attribute.Decimal
+    grandTotal: Attribute.Decimal & Attribute.Required
     verify: Attribute.JSON
     finalState: Attribute.JSON
     paymentOrder: Attribute.JSON & Attribute.Required
     paymentId: Attribute.String
     status: Attribute.Enumeration<['CREATED', 'ATTEMPT', 'FAILURE', 'SUCCESS']> & Attribute.Required
     orderId: Attribute.String & Attribute.Required & Attribute.Unique
+    mode: Attribute.Enumeration<['CASH', 'COD', 'RAZORPAY']> & Attribute.Required & Attribute.DefaultTo<'RAZORPAY'>
+    collectedBy: Attribute.Relation<'api::payment.payment', 'oneToOne', 'plugin::users-permissions.user'>
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     publishedAt: Attribute.DateTime
@@ -1024,12 +1043,17 @@ export interface ApiShippingShipping extends Schema.CollectionType {
     singularName: 'shipping'
     pluralName: 'shippings'
     displayName: 'Shipping'
+    description: ''
   }
   options: {
     draftAndPublish: true
   }
   attributes: {
-    awbNo: Attribute.String & Attribute.Required & Attribute.Unique
+    awbNo: Attribute.String & Attribute.Unique
+    address: Attribute.Component<'address.address'>
+    charge: Attribute.Decimal
+    state: Attribute.Enumeration<['ORDER_RECEIVED', 'SHIPMENT_CREATED', 'IN_TRANSIT', 'DELIVERED']> &
+      Attribute.DefaultTo<'ORDER_RECEIVED'>
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     publishedAt: Attribute.DateTime
@@ -1128,6 +1152,7 @@ declare module '@strapi/types' {
       'api::contact.contact': ApiContactContact
       'api::discount-coupon.discount-coupon': ApiDiscountCouponDiscountCoupon
       'api::footer.footer': ApiFooterFooter
+      'api::invoice.invoice': ApiInvoiceInvoice
       'api::main-menu.main-menu': ApiMainMenuMainMenu
       'api::order.order': ApiOrderOrder
       'api::page.page': ApiPagePage

@@ -25,12 +25,11 @@ const SellerService = ({strapi}) => ({
   },
 
   getOrder(ctx) {
-    return strapi.query('api::order.order').findOne({
-      where: {id: ctx.request.params.orderId},
+    return strapi.service('api::order.order').findOne(ctx.request.params.orderId, {
       populate: {
         products: '*',
         payment: '*',
-        shippingAddress: '*',
+        shipping: {populate: {address: '*'}},
         billingAddress: '*',
         discountCoupon: '*'
       }
@@ -38,18 +37,36 @@ const SellerService = ({strapi}) => ({
   },
 
   async markAsDelivered(ctx) {
-    return strapi.query('api::order.order').update({
-      where: {id: ctx.request.params.orderId},
-      data: {state: 'DELIVERED'}
-    })
+    return strapi.service('api::order.order').update(ctx.request.params.orderId, {data: {state: 'DELIVERED'}})
   },
 
   async createOrder(ctx) {
-    const body = ctx.request.body
-    ctx.request.body = {data: body.billingAddress}
-    const address = await strapi.controller('api::address-by-seller.address-by-seller').createAddress(ctx)
-    // await strapi.controller('api::order.order').create(ctx)
-    return address
+    const order = await strapi.controller('api::order.order').createSellerOrder(ctx)
+    ctx.request.body.amount = order.amount
+    ctx.request.params.orderId = order.id
+    return this.payAndDeliver(ctx)
+  },
+
+  async payAndDeliver(ctx) {
+    const {mode} = ctx.request.body
+    if (mode === 'CASH') {
+      await strapi.service('api::order.order').updateAsCashCollected(ctx)
+    }
+    if (mode === 'RAZORPAY') {
+      await strapi.service('api::payment.payment').createPaymentLink(ctx.request.params.orderId)
+    }
+    return this.getOrder(ctx)
+  },
+
+  async verifyPayment(ctx) {
+    const paymentService = await strapi.service('api::payment.payment')
+    return await paymentService.verifyPaymentByLink(ctx.request.params.orderId, ctx.request.body)
+  }
+  ,
+
+  async paymentStatus(ctx) {
+    await strapi.service('api::payment.payment').updatePaymentStatus(ctx.request.params.orderId)
+    return this.getOrder(ctx)
   }
 })
 

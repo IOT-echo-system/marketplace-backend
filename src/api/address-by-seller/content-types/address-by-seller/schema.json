@@ -4,7 +4,8 @@
   "info": {
     "singularName": "address-by-seller",
     "pluralName": "address-by-sellers",
-    "displayName": "Address by seller"
+    "displayName": "Address by seller",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -50,8 +51,7 @@
     "mobileNo": {
       "type": "biginteger",
       "required": true,
-      "max": "9999999999",
-      "min": "1000000000"
+      "unique": true
     }
   }
 }

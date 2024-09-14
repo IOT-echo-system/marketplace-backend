@@ -17,6 +17,18 @@ export default ({strapi}) => {
 
     createOrder(ctx) {
       return sellerService.createOrder(ctx)
+    },
+
+    payAndDeliver(ctx) {
+      return sellerService.payAndDeliver(ctx)
+    },
+
+    verifyPayment(ctx) {
+      return sellerService.verifyPayment(ctx)
+    },
+
+    paymentStatus(ctx) {
+      return sellerService.paymentStatus(ctx)
     }
   }
 }

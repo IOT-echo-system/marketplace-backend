@@ -5,9 +5,8 @@ export default factories.createCoreController('api::order.order', ({strapi}) => 
     if (!ctx.state.user) {
       return ctx.unauthorized('You must be logged in to create an order')
     }
-    const orderService = strapi.service('api::order.order')
     try {
-      return orderService.createOrder(ctx.request.body.data, ctx.state.user.id)
+      return strapi.service('api::order.order').createOrder(ctx)
     } catch (error) {
       ctx.throw(error)
     }
@@ -19,12 +18,18 @@ export default factories.createCoreController('api::order.order', ({strapi}) => 
       filters: {...ctx.query.filters, user: ctx.state.user.id},
       sort: ['createdAt:desc'],
       populate: {
-        shippingAddress: '*',
+        shipping: {populate: {address: '*'}},
         billingAddress: '*',
         discountCoupon: '*',
+        payment: {fields: ['status', 'mode', 'collectedAmount']},
         products: {populate: {featuredImage: '*'}}
       }
     }
     return strapi.entityService.findMany('api::order.order', ctx.query)
+  },
+
+  async createSellerOrder(ctx) {
+    const orderService = strapi.service('api::order.order')
+    return orderService.createSellerOrder(ctx)
   }
 }))

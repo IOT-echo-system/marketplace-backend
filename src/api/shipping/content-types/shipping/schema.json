@@ -4,7 +4,8 @@
   "info": {
     "singularName": "shipping",
     "pluralName": "shippings",
-    "displayName": "Shipping"
+    "displayName": "Shipping",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -13,8 +14,27 @@
   "attributes": {
     "awbNo": {
       "type": "string",
-      "required": true,
+      "required": false,
       "unique": true
+    },
+    "address": {
+      "type": "component",
+      "repeatable": false,
+      "component": "address.address"
+    },
+    "charge": {
+      "type": "decimal"
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "ORDER_RECEIVED",
+        "SHIPMENT_CREATED",
+        "IN_TRANSIT",
+        "DELIVERED"
+      ],
+      "default": "ORDER_RECEIVED",
+      "required": false
     }
   }
 }

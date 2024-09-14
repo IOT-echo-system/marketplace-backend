@@ -33,20 +33,24 @@
       "component": "address.address",
       "required": true
     },
-    "shippingAddress": {
-      "type": "component",
-      "repeatable": false,
-      "component": "address.address"
-    },
     "state": {
       "type": "enumeration",
-      "enum": ["ORDER_NOT_PLACED", "PLACED", "DELIVERED", "CANCELLED"],
+      "enum": [
+        "ORDER_NOT_PLACED",
+        "PLACED",
+        "DELIVERED",
+        "CANCELLED"
+      ],
       "required": true,
       "default": "CREATED"
     },
     "type": {
       "type": "enumeration",
-      "enum": ["ONLINE", "SELLER", "STORE_PICKUP"],
+      "enum": [
+        "ONLINE",
+        "SELLER",
+        "STORE_PICKUP"
+      ],
       "required": true,
       "default": "SELLER"
     },
@@ -61,13 +65,15 @@
       "target": "plugin::users-permissions.user",
       "private": true
     },
-    "discountCoupon": {
-      "displayName": "Discount",
-      "type": "component",
-      "component": "discount-coupon.discount-coupon"
+    "invoice": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::invoice.invoice"
     },
-    "shippingCharge": {
-      "type": "integer"
+    "shipping": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::shipping.shipping"
     }
   }
 }

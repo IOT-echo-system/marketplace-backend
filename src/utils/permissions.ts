@@ -27,9 +27,8 @@ const apiTagAction = {
   find: {action: 'api::tag.tag.find'},
   findOne: {action: 'api::tag.tag.findOne'}
 }
-const apiShippingHelperAction = {
-  estimateDelivery: {action: 'api::shipping-helper.shipping-helper.estimateDelivery'},
-  createOrder: {action: 'api::shipping-helper.shipping-helper.createOrder'}
+const apiShippingAction = {
+  estimateDelivery: {action: 'api::shipping.shipping.estimateDelivery'}
 }
 
 const apiUserPermissionAction = {
@@ -58,7 +57,10 @@ const apiSellerAction = {
   order: {action: 'api::seller.seller.getAllOrders'},
   createOrder: {action: 'api::seller.seller.createOrder'},
   orderOne: {action: 'api::seller.seller.getOrder'},
-  markAsDelivered: {action: 'api::seller.seller.markAsDelivered'}
+  markAsDelivered: {action: 'api::seller.seller.markAsDelivered'},
+  payAndDeliver: {action: 'api::seller.seller.payAndDeliver'},
+  verifyPayment: {action: 'api::seller.seller.verifyPayment'},
+  paymentStatus: {action: 'api::seller.seller.paymentStatus'}
 }
 
 const apiAddressAction = {
@@ -88,9 +90,10 @@ const basePermission = [
   apiCategoryAction.findOne,
   apiTagAction.find,
   apiTagAction.findOne,
-  apiShippingHelperAction.estimateDelivery,
+  apiShippingAction.estimateDelivery,
   apiDiscountCouponAction.findOne,
-  apiDiscountCouponAction.find
+  apiDiscountCouponAction.find,
+  apiSellerAction.verifyPayment
 ]
 
 export const permissions = {
@@ -124,7 +127,8 @@ export const permissions = {
     apiSellerAction.orderOne,
     apiSellerAction.markAsDelivered,
     apiSellerAction.createOrder,
-    apiShippingHelperAction.createOrder,
+    apiSellerAction.payAndDeliver,
+    apiSellerAction.paymentStatus,
     apiAddressBySellerAction.create,
     apiAddressBySellerAction.find,
     apiAddressBySellerAction.findOne,
