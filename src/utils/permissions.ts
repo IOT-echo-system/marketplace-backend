@@ -69,7 +69,8 @@ const apiAddressAction = {
   delete: {action: 'api::address.address.delete'},
   find: {action: 'api::address.address.find'},
   findOne: {action: 'api::address.address.findOne'},
-  update: {action: 'api::address.address.update'}
+  update: {action: 'api::address.address.update'},
+  getAddress: {action: 'api::address.address.getAddress'}
 }
 
 const apiAddressBySellerAction = {
@@ -94,7 +95,8 @@ const basePermission = [
   apiShippingAction.estimateDelivery,
   apiDiscountCouponAction.findOne,
   apiDiscountCouponAction.find,
-  apiSellerAction.verifyPayment
+  apiSellerAction.verifyPayment,
+  apiAddressAction.getAddress
 ]
 
 export const permissions = {
