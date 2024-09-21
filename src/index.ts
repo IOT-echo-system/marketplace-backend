@@ -46,8 +46,7 @@ const addPermissionFor = async (type: keyof typeof permissions) => {
 }
 
 export default {
-  register({strapi}) {
-  },
+  register({strapi}) {},
 
   async bootstrap({strapi}) {
     await addPermissionFor('public')

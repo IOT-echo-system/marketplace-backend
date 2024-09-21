@@ -27,12 +27,7 @@
     },
     "state": {
       "type": "enumeration",
-      "enum": [
-        "ORDER_RECEIVED",
-        "SHIPMENT_CREATED",
-        "IN_TRANSIT",
-        "DELIVERED"
-      ],
+      "enum": ["ORDER_RECEIVED", "SHIPMENT_CREATED", "IN_TRANSIT", "DELIVERED"],
       "default": "ORDER_RECEIVED",
       "required": false
     }

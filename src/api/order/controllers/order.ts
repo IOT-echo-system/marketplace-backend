@@ -20,16 +20,10 @@ export default factories.createCoreController('api::order.order', ({strapi}) => 
       populate: {
         shipping: {populate: {address: '*'}},
         billingAddress: '*',
-        discountCoupon: '*',
-        payment: {fields: ['status', 'mode', 'collectedAmount']},
+        payment: {fields: ['status', 'mode', 'gst', 'amount', 'grandTotal'], populate: {discountCoupon: '*'}},
         products: {populate: {featuredImage: '*'}}
       }
     }
     return strapi.entityService.findMany('api::order.order', ctx.query)
-  },
-
-  async createSellerOrder(ctx) {
-    const orderService = strapi.service('api::order.order')
-    return orderService.createSellerOrder(ctx)
   }
 }))

@@ -13,18 +13,57 @@ const razorpay = new Razorpay({
 })
 
 export default factories.createCoreService('api::payment.payment', ({strapi}) => ({
-  async initiatePayment(orderId: number, amount: number, paymentMode: 'CASH' | 'COD' | 'RAZORPAY') {
+  async createPayment(ctx) {
+    const data = ctx.request.body
+    ctx.query = {filters: {code: data.discountCoupon?.code ?? ''}}
+    const discountCoupon = await strapi.controller('api::discount-coupon.discount-coupon').find(ctx, {})
+    const discountAmount = (data.amount * (discountCoupon[0]?.discount ?? 0)) / 100
+    const gst = ((data.gstBill ?? true) ? data.amount - discountAmount : 0) * 0.18
+    return super.create({
+      data: {
+        amount: data.amount,
+        discountCoupon: discountCoupon[0]
+          ? {
+              ...discountCoupon[0],
+              amount: discountAmount
+            }
+          : null,
+        gst,
+        grandTotal: data.amount - discountAmount + gst,
+        status: 'CREATED',
+        mode: data.mode
+      }
+    })
+  },
+
+  async createPaymentBySeller(ctx) {
+    const data = ctx.request.body
+    const gst = ((data.cart.gstBill ?? true) ? data.amount - (data.cart.discount?.amount ?? 0) : 0) * 0.18
+    return super.create({
+      data: {
+        amount: data.amount,
+        discountCoupon: data.cart.discount,
+        gst,
+        grandTotal: data.amount - (data.cart.discount?.amount ?? 0) + gst,
+        status: 'CREATED',
+        mode: data.mode
+      }
+    })
+  },
+
+  async initiatePayment(paymentId: number, orderId: number, amount: number, paymentMode: 'CASH' | 'COD' | 'RAZORPAY') {
     const options = {amount: Math.floor(amount * 100), currency: 'INR', receipt: `payment-${orderId}`}
     try {
-
       const paymentOrder = await razorpay.orders.create(options)
-      return super.create({
+      return strapi.query('api::payment.payment').update({
+        where: {id: paymentId},
         data: {
           order: orderId,
           paymentOrder: paymentOrder,
           orderId: paymentOrder.id,
           status: 'CREATED',
-          mode: paymentMode
+          mode: paymentMode,
+          grandTotal: amount
         }
       })
     } catch (error) {
@@ -98,7 +137,7 @@ export default factories.createCoreService('api::payment.payment', ({strapi}) =>
         customer: {
           name: order.billingAddress.name,
           contact: `+91${order.billingAddress.mobileNo}`,
-          email: order.user.email
+          email: order.user?.email
         },
         notify: {
           sms: true,
@@ -110,7 +149,7 @@ export default factories.createCoreService('api::payment.payment', ({strapi}) =>
       })
       return strapi.query('api::payment.payment').update({
         where: {order: orderId},
-        data: {paymentOrder: response, paymentLinkId: response.id, mode: 'RAZORPAY'}
+        data: {paymentOrder: response, paymentId: response.id, mode: 'RAZORPAY'}
       })
     } catch (error) {
       console.log(error, 'error')
@@ -120,7 +159,7 @@ export default factories.createCoreService('api::payment.payment', ({strapi}) =>
   async verifyPaymentByLink(orderId: number, values: VerifyPaymentRequest) {
     const payment = await strapi.query('api::payment.payment').findOne({where: {order: orderId}})
     if (payment.paymentOrder.reference_id === values.razorpay_payment_link_reference_id) {
-      const response = await razorpay.paymentLink.fetch(payment.paymentLinkId) as PaymentLinks.RazorpayPaymentLink & {
+      const response = (await razorpay.paymentLink.fetch(payment.paymentLinkId)) as PaymentLinks.RazorpayPaymentLink & {
         order_id: string
       }
       await strapi.query('api::payment.payment').update({
@@ -140,7 +179,7 @@ export default factories.createCoreService('api::payment.payment', ({strapi}) =>
 
   async updatePaymentStatus(orderId: number) {
     const payment = await strapi.query('api::payment.payment').findOne({where: {order: orderId}})
-    const response = await razorpay.paymentLink.fetch(payment.paymentOrder.id) as PaymentLinks.RazorpayPaymentLink & {
+    const response = (await razorpay.paymentLink.fetch(payment.paymentOrder.id)) as PaymentLinks.RazorpayPaymentLink & {
       order_id: string
     }
     await strapi.query('api::payment.payment').update({
@@ -155,9 +194,25 @@ export default factories.createCoreService('api::payment.payment', ({strapi}) =>
   },
 
   async updateAsCashCollected(ctx) {
-    await strapi.query('api::payment.payment').update({
+    const {amount} = ctx.request.body
+    const payment = await strapi.query('api::payment.payment').findOne({
       where: {order: ctx.request.params.orderId},
-      data: {status: 'SUCCESS', mode: 'CASH', collectedBy: ctx.state.user.id}
+      populate: {discountCoupon: '*'}
+    })
+    const discountAmount = (payment.grandTotal - amount) / 1.18
+    const discountCoupon = payment.discountCoupon
+      ? {...payment.discountCoupon, amount: discountAmount + payment.discountCoupon.amount}
+      : {code: 'SELLER', discount: 0, amount: discountAmount}
+
+    return await super.update(payment.id, {
+      data: {
+        status: 'SUCCESS',
+        mode: 'CASH',
+        collectedBy: ctx.state.user.id,
+        discountCoupon,
+        gst: (payment.amount - discountCoupon.amount) * 0.18,
+        grandTotal: (payment.amount - discountCoupon.amount) * 1.18
+      }
     })
   }
 }))

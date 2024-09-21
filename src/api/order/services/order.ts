@@ -5,16 +5,18 @@ export default factories.createCoreService('api::order.order', ({strapi}) => ({
   async createOrder(ctx) {
     const data: OrderRequest = ctx.request.body
     const productsWithQty = await strapi.service('api::product.product').getProductsWithQty(data.productIds)
-    const {amount, qty} = productsWithQty.reduce(({amount, qty}, product) => {
-      return {amount: amount + product.price * product.qty, qty: qty + product.qty}
-    }, {amount: 0, qty: 0})
+    const {amount, qty} = productsWithQty.reduce(
+      ({amount, qty}, product) => {
+        return {amount: amount + product.price * product.qty, qty: qty + product.qty}
+      },
+      {amount: 0, qty: 0}
+    )
 
+    ctx.request.body.amount = amount
+    const payment = await strapi.service('api::payment.payment').createPayment(ctx)
 
-    ctx.query = {filters: {code: data.discountCoupon?.code ?? ''}}
-    const discountCoupon = await strapi.controller('api::discount-coupon.discount-coupon').find(ctx, {})
-
-    const amountAfterDiscount = amount - (amount * (discountCoupon[0]?.discount ?? 0)) / 100
-    const shippingCharge = (data.type === 'ONLINE' && amountAfterDiscount < +(process.env.FREE_DELIVERY_THRESHOLD ?? 2000)) ? 99 : 0
+    const shippingCharge =
+      data.type === 'ONLINE' && payment.grandTotal < +(process.env.FREE_DELIVERY_THRESHOLD ?? 2000) ? 99 : 0
     let shipping = null
     if (data.type === 'ONLINE') {
       if (data.shippingAddress) {
@@ -28,57 +30,66 @@ export default factories.createCoreService('api::order.order', ({strapi}) => ({
         return ctx.throw('Shipping address required!')
       }
     }
+
     const order = await super.create({
       data: {
         ...data,
-        state: data.paymentMode === 'RAZORPAY' ? 'ORDER_NOT_PLACED' : 'PLACED',
+        state: data.mode === 'RAZORPAY' ? 'ORDER_NOT_PLACED' : 'PLACED',
         products: productsWithQty,
         user: ctx.state.user.id,
-        amount: amountAfterDiscount * 1.18 + shippingCharge,
+        amount: payment.grandTotal + shippingCharge,
         qty,
-        discountCoupon: discountCoupon[0] ? {
-          ...discountCoupon[0],
-          amount: amount * (discountCoupon[0].discount ?? 0)
-        } : null,
         shipping: shipping?.id
       }
     })
 
-    const paymentResponse = await strapi.service('api::payment.payment').initiatePayment(order.id, order.amount, data.paymentMode)
+    const paymentResponse = await strapi
+      .service('api::payment.payment')
+      .initiatePayment(payment.id, order.id, order.amount, data.mode)
     await super.update(order.id, {data: {payment: paymentResponse.id}})
     return {order, payment: paymentResponse.paymentOrder}
   },
 
   async createSellerOrder(ctx) {
     const data = ctx.request.body.cart
-    const {amount, qty} = data.products.reduce(({amount, qty}, product) => {
-      return {amount: amount + product.price * product.qty, qty: qty + product.qty}
-    }, {amount: 0, qty: 0})
+    const {amount, qty} = data.products.reduce(
+      ({amount, qty}, product) => {
+        return {amount: amount + product.price * product.qty, qty: qty + product.qty}
+      },
+      {amount: 0, qty: 0}
+    )
+    ctx.request.body.amount = amount
+    const payment = await strapi.service('api::payment.payment').createPaymentBySeller(ctx)
     const order = await super.create({
       data: {
         billingAddress: data.billingAddress,
-        state: ctx.request.body.mode === 'CASH' ? 'PLACED' : 'ORDER_NOT_PLACED',
+        state: 'PLACED',
         products: data.products,
-        amount: amount * (data.gstBill ? 1.18 : 1),
+        amount: payment.grandTotal,
         qty,
-        discountCoupon: data.discount,
-        shippingCharge: 0,
-        type: 'SELLER'
+        type: 'SELLER',
+        payment: payment.id
       }
     })
-    const paymentService = strapi.service('api::payment.payment')
-    const paymentResponse = await paymentService.initiatePayment(order.id, order.amount, ctx.request.body.mode)
-    return await super.update(order.id, {data: {payment: paymentResponse.id}})
+    await strapi.service('api::payment.payment').initiatePayment(payment.id, order.id, order.amount, data.mode)
+    return order
   },
 
   async updateAsCashCollected(ctx) {
-    const order = await strapi.query('api::order.order').findOne(ctx.request.params.orderId)
-    strapi.query('api::order.order').update({
+    const {amount} = ctx.request.body
+    await strapi.service('api::payment.payment').updateAsCashCollected(ctx)
+
+    return await strapi.query('api::order.order').update({
       where: {id: ctx.request.params.orderId},
-      data: {state: 'DELIVERED', discount: {amount: order.discount.amount}}
+      data: {state: 'DELIVERED', amount}
     })
-    const paymentService = strapi.service('api::payment.payment')
-    const paymentResponse = await paymentService.initiatePayment(order.id, order.amount, ctx.request.body.mode)
-    return await super.update(order.id, {data: {payment: paymentResponse.id}})
+  },
+
+  async markAsDelivered(orderId: number) {
+    const order = await strapi.service('api::order.order').findOne(orderId, {populate: {payment: '*'}})
+    if (order.payment.status === 'SUCCESS') {
+      return await strapi.service('api::order.order').update(orderId, {data: {state: 'DELIVERED'}})
+    }
+    throw new Error('Payment is not completed, please complete the payment first')
   }
 }))

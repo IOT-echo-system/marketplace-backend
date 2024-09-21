@@ -35,22 +35,13 @@
     },
     "state": {
       "type": "enumeration",
-      "enum": [
-        "ORDER_NOT_PLACED",
-        "PLACED",
-        "DELIVERED",
-        "CANCELLED"
-      ],
+      "enum": ["ORDER_NOT_PLACED", "PLACED", "DELIVERED", "CANCELLED"],
       "required": true,
       "default": "CREATED"
     },
     "type": {
       "type": "enumeration",
-      "enum": [
-        "ONLINE",
-        "SELLER",
-        "STORE_PICKUP"
-      ],
+      "enum": ["ONLINE", "SELLER", "STORE_PICKUP"],
       "required": true,
       "default": "SELLER"
     },

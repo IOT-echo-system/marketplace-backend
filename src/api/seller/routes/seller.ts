@@ -55,6 +55,14 @@ export default {
       config: {
         policies: []
       }
+    },
+    {
+      method: 'GET',
+      path: '/seller/products',
+      handler: 'seller.getProducts',
+      config: {
+        policies: []
+      }
     }
   ]
 }

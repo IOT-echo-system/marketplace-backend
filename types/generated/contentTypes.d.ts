@@ -966,15 +966,15 @@ export interface ApiPaymentPayment extends Schema.CollectionType {
   attributes: {
     order: Attribute.Relation<'api::payment.payment', 'oneToOne', 'api::order.order'>
     amount: Attribute.Decimal & Attribute.Required
-    discount: Attribute.Decimal & Attribute.Required
     gst: Attribute.Decimal
     grandTotal: Attribute.Decimal & Attribute.Required
+    discountCoupon: Attribute.Component<'discount-coupon.discount-coupon'>
     verify: Attribute.JSON
     finalState: Attribute.JSON
-    paymentOrder: Attribute.JSON & Attribute.Required
+    paymentOrder: Attribute.JSON
     paymentId: Attribute.String
     status: Attribute.Enumeration<['CREATED', 'ATTEMPT', 'FAILURE', 'SUCCESS']> & Attribute.Required
-    orderId: Attribute.String & Attribute.Required & Attribute.Unique
+    orderId: Attribute.String & Attribute.Unique
     mode: Attribute.Enumeration<['CASH', 'COD', 'RAZORPAY']> & Attribute.Required & Attribute.DefaultTo<'RAZORPAY'>
     collectedBy: Attribute.Relation<'api::payment.payment', 'oneToOne', 'plugin::users-permissions.user'>
     createdAt: Attribute.DateTime

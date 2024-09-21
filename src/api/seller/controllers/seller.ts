@@ -11,8 +11,12 @@ export default ({strapi}) => {
       return sellerService.getOrder(ctx)
     },
 
-    markAsDelivered(ctx) {
-      return sellerService.markAsDelivered(ctx)
+    async markAsDelivered(ctx) {
+      try {
+        return await sellerService.markAsDelivered(ctx)
+      } catch (error) {
+        ctx.throw(error.message)
+      }
     },
 
     createOrder(ctx) {
@@ -29,6 +33,10 @@ export default ({strapi}) => {
 
     paymentStatus(ctx) {
       return sellerService.paymentStatus(ctx)
+    },
+
+    getProducts(ctx) {
+      return sellerService.getProducts(ctx)
     }
   }
 }

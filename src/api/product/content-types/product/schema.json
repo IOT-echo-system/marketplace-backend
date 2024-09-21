@@ -15,7 +15,8 @@
     "title": {
       "type": "string",
       "required": true,
-      "minLength": 1    },
+      "minLength": 1
+    },
     "slug": {
       "type": "uid",
       "targetField": "title",

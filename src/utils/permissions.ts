@@ -60,7 +60,8 @@ const apiSellerAction = {
   markAsDelivered: {action: 'api::seller.seller.markAsDelivered'},
   payAndDeliver: {action: 'api::seller.seller.payAndDeliver'},
   verifyPayment: {action: 'api::seller.seller.verifyPayment'},
-  paymentStatus: {action: 'api::seller.seller.paymentStatus'}
+  paymentStatus: {action: 'api::seller.seller.paymentStatus'},
+  getProducts: {action: 'api::seller.seller.getProducts'}
 }
 
 const apiAddressAction = {
@@ -97,10 +98,7 @@ const basePermission = [
 ]
 
 export const permissions = {
-  public: [
-    ...basePermission,
-    apiContactAction.create
-  ],
+  public: [...basePermission, apiContactAction.create],
   authenticated: [
     ...basePermission,
     apiContactAction.create,
@@ -115,7 +113,6 @@ export const permissions = {
     apiPaymentAction.verifyPayment,
     apiUserPermissionAction.roleFind,
     apiUserPermissionAction.roleFindOne
-
   ],
   seller: [
     ...basePermission,
@@ -129,6 +126,7 @@ export const permissions = {
     apiSellerAction.createOrder,
     apiSellerAction.payAndDeliver,
     apiSellerAction.paymentStatus,
+    apiSellerAction.getProducts,
     apiAddressBySellerAction.create,
     apiAddressBySellerAction.find,
     apiAddressBySellerAction.findOne,

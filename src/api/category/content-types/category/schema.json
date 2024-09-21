@@ -15,7 +15,8 @@
     "name": {
       "type": "string",
       "required": true,
-      "minLength": 1    },
+      "minLength": 1
+    },
     "link": {
       "type": "uid",
       "targetField": "name",
