@@ -21,7 +21,6 @@ export type PostOffice = {
 }
 export type AddressResponse = Array<{PostOffice: PostOffice[]; Status: string}>
 
-
 export default factories.createCoreController('api::address.address', ({strapi}) => ({
   async create(ctx) {
     if (!ctx.state.user) {

@@ -129,7 +129,7 @@ export default factories.createCoreService('api::payment.payment', ({strapi}) =>
     try {
       const response = await razorpay.paymentLink.create({
         amount: Math.floor(order.amount * 100),
-        upi_link: process.env.NODE_ENV === 'production',
+        upi_link: process.env.RAZORPAY_UPI_ENABLED === 'true',
         currency: 'INR',
         accept_partial: false,
         description: `Payment for Order ${orderId}`,
