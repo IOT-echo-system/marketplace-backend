@@ -1093,12 +1093,15 @@ export interface ApiStoreLocationStoreLocation extends Schema.SingleType {
     singularName: 'store-location'
     pluralName: 'store-locations'
     displayName: 'Store location'
+    description: ''
   }
   options: {
     draftAndPublish: true
   }
   attributes: {
     location: Attribute.Component<'address.address'>
+    email: Attribute.Email & Attribute.Required
+    mapLink: Attribute.String & Attribute.Required
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     publishedAt: Attribute.DateTime

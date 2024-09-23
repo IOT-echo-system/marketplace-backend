@@ -4,7 +4,8 @@
   "info": {
     "singularName": "store-location",
     "pluralName": "store-locations",
-    "displayName": "Store location"
+    "displayName": "Store location",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -15,6 +16,14 @@
       "type": "component",
       "repeatable": false,
       "component": "address.address"
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "mapLink": {
+      "type": "string",
+      "required": true
     }
   }
 }

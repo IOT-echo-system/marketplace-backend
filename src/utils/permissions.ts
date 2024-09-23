@@ -11,6 +11,9 @@ const apiMainMenuAction = {
 const apiFooterAction = {
   find: {action: 'api::footer.footer.find'}
 }
+const apiStoreLocationAction = {
+  find: {action: 'api::store-location.store-location.find'}
+}
 const apiPageAction = {
   find: {action: 'api::page.page.find'},
   findOne: {action: 'api::page.page.findOne'}
@@ -84,6 +87,7 @@ const basePermission = [
   apiSiteInfoAction.find,
   apiMainMenuAction.find,
   apiFooterAction.find,
+  apiStoreLocationAction.find,
   apiPageAction.find,
   apiPageAction.findOne,
   apiProductAction.find,
