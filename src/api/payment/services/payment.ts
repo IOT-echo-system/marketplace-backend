@@ -159,7 +159,9 @@ export default factories.createCoreService('api::payment.payment', ({strapi}) =>
   async verifyPaymentByLink(orderId: number, values: VerifyPaymentRequest) {
     const payment = await strapi.query('api::payment.payment').findOne({where: {order: orderId}})
     if (payment.paymentOrder.reference_id === values.razorpay_payment_link_reference_id) {
-      const response = (await razorpay.paymentLink.fetch(payment.paymentLinkId)) as PaymentLinks.RazorpayPaymentLink & {
+      const response = (await razorpay.paymentLink.fetch(
+        payment.paymentOrder.id
+      )) as PaymentLinks.RazorpayPaymentLink & {
         order_id: string
       }
       await strapi.query('api::payment.payment').update({
